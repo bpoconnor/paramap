@@ -2,7 +2,7 @@ Package: paramap
 Type: Package
 Title: Factor Analysis Functions for Assessing Dimensionality
 Version: 1.9
-Date: 2019-03-16
+Date: 2019-03-29
 Author: Brian P. O'Connor 
 Maintainer: Brian P. O'Connor  <brian.oconnor@ubc.ca>
 Description: Factor analysis-related functions and datasets for assessing dimensionality.

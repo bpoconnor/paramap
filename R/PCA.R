@@ -10,7 +10,10 @@ if ( nrow(data) == ncol(data) ) {
 	if ( all(diag(data==1)) ) {datakind = 'correlations'}} else{ datakind = 'notcorrels'}
 
 
-if (datakind == 'correlations')  cormat <- data 
+if (datakind == 'correlations')  {
+	cormat <- data 
+	ctype <- 'from user'
+}
 
 if (datakind == 'notcorrels') {
 	Ncases <- nrow(data)
@@ -21,7 +24,7 @@ if (datakind == 'notcorrels') {
 	if (corkind=='pearson')     {cormat <- cor(data, method="pearson");  ctype <- 'Pearson'}
 	if (corkind=='kendall')     {cormat <- cor(data, method="kendall");  ctype <- 'Kendall'}
 	if (corkind=='spearman')    {cormat <- cor(data, method="spearman"); ctype <- 'Spearman'} 
-	if (corkind=='polychoric')  {cormat <- POLYCHORIC_R(data);            ctype <- 'Polychoric'}
+	if (corkind=='polychoric')  {cormat <- POLYCHORIC_R(data);           ctype <- 'Polychoric'}
 }
 
 eigval <- diag(eigen(cormat) $values)

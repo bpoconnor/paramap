@@ -11,7 +11,11 @@ if ( nrow(data) == ncol(data) ) {
 	if ( all(diag(data==1)) ) {datakind = 'correlations'}} else{ datakind = 'notcorrels'}
 
 
-if (datakind == 'correlations')  cormat <- data 
+if (datakind == 'correlations')  {
+	cormat <- data 
+	ctype <- 'from user'
+}
+ 
 
 if (datakind == 'notcorrels') {
 	Ncases <- nrow(data)

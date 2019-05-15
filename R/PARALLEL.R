@@ -5,11 +5,11 @@ PARALLEL <- function ( Nvars=50, Ncases=300, Ndatasets=100, extract='PCA', perce
                        corkind='pearson', display=TRUE){
 
 evals <- matrix(0, nrow = Nvars, ncol = Ndatasets)
-pb <- utils::txtProgressBar(min = 0, max = Ndatasets, style = 3) 
+# pb <- utils::txtProgressBar(min = 0, max = Ndatasets, style = 3) 
 
 for (nds in 1:Ndatasets) { 
 
-	utils::setTxtProgressBar(pb,nds)
+	# utils::setTxtProgressBar(pb,nds)
 
 #	cat("Progress - Random Dataset: ", nds, "of ", Ndatasets, "\r"); utils::flush.console()
 

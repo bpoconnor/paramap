@@ -2,7 +2,7 @@
 
 # CFA / PAF  (Bernstein p 189; smc = from Bernstein p 104)
 
-PA_FA <- function (data, corkind='pearson', nfactors=2, iterpaf=100, rotate='promax', ppower=3, display=TRUE ) {
+PA_FA <- function (data, corkind='pearson', Nfactors=NULL, iterpaf=100, rotate='promax', ppower=3, display=TRUE ) {
 
 cnoms <- colnames(data) # get colnames
 
@@ -26,8 +26,14 @@ if (datakind == 'notcorrels') {
 	if (corkind=='pearson')     {cormat <- cor(data, method="pearson");  ctype <- 'Pearson'}
 	if (corkind=='kendall')     {cormat <- cor(data, method="kendall");  ctype <- 'Kendall'}
 	if (corkind=='spearman')    {cormat <- cor(data, method="spearman"); ctype <- 'Spearman'} 
-	if (corkind=='polychoric')  {cormat <- POLYCHORIC_R(data);            ctype <- 'Polychoric'}
-	}
+	if (corkind=='polychoric')  {cormat <- POLYCHORIC_R(data);           ctype <- 'Polychoric'}
+}
+
+if (is.null(Nfactors)) {		
+	nfactsMAP <- MAP(cormat, display='no')
+	Nfactors <- nfactsMAP$nfMAP
+	NfactorsWasNull <- TRUE
+}
 
 converge  <- .001
 rpaf <- as.matrix(cormat)
@@ -42,11 +48,11 @@ for (iter in 1:(iterpaf + 1)) {
 
 eigvect <- eigen(rpaf) $vectors
 
-if (nfactors == 1) {
-loadings <- eigvect[,1:nfactors] * sqrt(eigval[1:nfactors,1:nfactors])
+if (Nfactors == 1) {
+loadings <- eigvect[,1:Nfactors] * sqrt(eigval[1:Nfactors,1:Nfactors])
 communal <- loadings^2
 }else {
-loadings <- eigvect[,1:nfactors] %*% sqrt(eigval[1:nfactors,1:nfactors])
+loadings <- eigvect[,1:Nfactors] %*% sqrt(eigval[1:Nfactors,1:Nfactors])
 communal <- rowSums(loadings^2) }
 
 if ( max(max(abs(communal-smc))) < converge) { break }
@@ -55,7 +61,7 @@ if ( max(max(abs(communal-smc))) >= converge  & iter < iterpaf) { smc <- communa
 }
 loadings <- as.matrix(loadings)
 rownames(loadings) <- cnoms
-colnames(loadings) <-  c(paste("  Factor ", 1:nfactors, sep="") )
+colnames(loadings) <-  c(paste("  Factor ", 1:Nfactors, sep="") )
 
 evalpaf  <-  cbind(diag(eigval))
 rownames(evalpaf) <- 1:nrow(evalpaf)
@@ -65,11 +71,11 @@ if (rotate=='none')  { pafOutput <- list( eigenvalues=evalpaf, loadingsNOROT=loa
 
 if (rotate=='promax' | rotate=='varimax') {
 	
-	if (nfactors==1) { 
+	if (Nfactors==1) { 
 		pafOutput <- list( eigenvalues=evalpaf, loadingsNOROT=loadings, loadingsROT=loadings, structure=loadings, pattern=loadings ) 
 		} 
 
-	if (nfactors > 1) {
+	if (Nfactors > 1) {
 		if (rotate=='varimax') { 
 			loadingsROT <- paramap::VARIMAX(loadings,display=FALSE)
 			pafOutput <- list( eigenvalues=evalpaf, loadingsNOROT=loadings, loadingsROT=loadingsROT )  
@@ -87,6 +93,10 @@ if (rotate=='promax' | rotate=='varimax') {
 if (display == TRUE) {
 	cat("\n\nPrincipal Axis Factor Analysis\n\n")
 	cat("\nSpecified kind of correlations for this analysis: ", ctype, "\n\n")
+	if (NfactorsWasNull <- TRUE) {
+		cat('\nNfactors was not specified and so the MAP test was conducted to determine')
+		cat('\nthe number of factors to extract: Nfactors =', Nfactors,'\n\n')		
+	}
 	if ( max(max(abs(communal-smc))) < converge) {
 		cat("\nPAF converged in iterations = ", iter, "\n\n")	
 		print(round(evalpaf,2))
@@ -96,8 +106,8 @@ if (display == TRUE) {
 		print(round(cbind(loadings, communal),2))
 		} else { cat("\nPAF did not converge in the following number of iterations:  ", (iter-1))
 		}
-	if (nfactors==1) { cat("\n\nNo rotation because there is only one factor\n\n") }
-	if (nfactors > 1) {
+	if (Nfactors==1) { cat("\n\nNo rotation because there is only one factor\n\n") }
+	if (Nfactors > 1) {
 		if (rotate=='none')    {cat("\n\nRotation Procedure:  No Rotation")}
 		if (rotate=='varimax') {cat("\n\nVarimax Rotated Loadings:\n\n"); print(round(loadingsROT,2));cat("\n\n")}
 		if (rotate=='promax')  { 

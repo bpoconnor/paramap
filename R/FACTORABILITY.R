@@ -11,6 +11,7 @@ if ( nrow(data) == ncol(data) ) {
 
 if (datakind == 'correlations') {
 	cormat <- data 
+	ctype <- 'from user'	
 	if (is.null(Ncases)) {
 		Ncases = 200
 		cat('\n\n"data" is a correlation matrix but Ncases was not specified, so Ncases was set = 200')		
@@ -115,7 +116,7 @@ cat('\n\nConsider excluding items with KMO values < .5 and then re-run the FACTO
 
 cat('\n\nThe overall KMO coefficient indicates the proportion of')
 cat('\nvariance in the variables that might be caused by underlying')
-cat('\nfactors. If the variables share common factors, then the')
+cat('\nNfactors. If the variables share common factors, then the')
 cat('\noverall KMO coefficient should be close to 1.0. The overall')
 cat('\nKMO indicates the extent to which there is at least one')
 cat('\nlatent factor underlying the variables. The overall KMO')

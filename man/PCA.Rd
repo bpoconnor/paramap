@@ -2,7 +2,7 @@
 \alias{PCA}
 \title{principal components analysis}
 \description{principal components analysis}
-\usage{PCA(data, corkind, nfactors, rotate, ppower, display)}
+\usage{PCA(data, corkind, Nfactors, rotate, ppower, display)}
 \arguments{
   \item{data}{
   \code{}An all-numeric dataframe where the rows are cases & the columns are 
@@ -12,7 +12,7 @@
   \code{}The kind of correlation matrix to be used if data is not a correlation matrix. 
   The options are 'pearson', 'kendall', 'spearman', and 'polychoric'. Required 
   only if the entered data is not a correlation matrix.}
-  \item{nfactors}{
+  \item{Nfactors}{
   \code{}The number of components to extract.}
   \item{rotate}{
   \code{}The factor rotation method. The options are: 'promax', 'varimax', and 'none'.}
@@ -32,5 +32,5 @@
 }
 \author{Brian P. O'Connor }
 \examples{
-PCA(data_RSE, corkind='pearson', nfactors=2, rotate='promax', ppower=3, display=TRUE)
+PCA(data_RSE, corkind='pearson', Nfactors=NULL, rotate='promax', ppower=3, display=TRUE)
 }

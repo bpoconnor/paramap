@@ -30,13 +30,13 @@ if (datakind == 'notcorrels') {
 	if (corkind=='polychoric')  rdata <- POLYCHORIC_R(data) 
 }
 
-nfactors <- cbind(NEVALSGT1(rdata)) # Number of eigenvalues > 1
+Nfactors <- cbind(NEVALSGT1(rdata)) # Number of eigenvalues > 1
 
-paf.out <- PA_FA(rdata, nfactors=nfactors, display="no")
+paf.out <- PA_FA(rdata, Nfactors=Nfactors, display="no")
 
 loadings <- paf.out$structure
 
-if (nfactors > 1) loadings <- VARIMAX(loadings, display=FALSE)
+if (Nfactors > 1) loadings <- VARIMAX(loadings, display=FALSE)
 
 rowmax <- cbind(apply(abs(loadings), 1, max))
 

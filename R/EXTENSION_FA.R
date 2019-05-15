@@ -89,51 +89,51 @@ evals1 <- cbind(eigen(rcore) $values)
 fits1 <- ROOTFIT( data, corkind='pearson', extract=extract, verbose = 'FALSE' )
 
 # number of factors for the core variables
-if (roottest=='Nsalient')  nfactors1 <- SALIENT(rcore) 
+if (roottest=='Nsalient')  Nfactors1 <- SALIENT(rcore) 
 
 if (roottest=='parallel')  {
 	nfs <- RAWPAR(rcore, randtype='generated', extract=extract, Ndatasets=Ndatasets, percentile=percentile,
                   corkindRAND=corkindRAND, Ncases=Ncases, display=FALSE)
-	nfactors1 <- nfs$nfPA
+	Nfactors1 <- nfs$nfPA
 }
 if (roottest=='MAP') {
 	nfs <- MAP(rcore, display=FALSE)
-	nfactors1 <- nfs$nfMAP
+	Nfactors1 <- nfs$nfMAP
 	} 
 
-if (roottest=='SEscree')   nfactors1 <- SESCREE(rcore) 
+if (roottest=='SEscree')   Nfactors1 <- SESCREE(rcore) 
 
-if (roottest=='#evals>1')  nfactors1 <- NEVALSGT1(rcore) 
+if (roottest=='#evals>1')  Nfactors1 <- NEVALSGT1(rcore) 
 
-if (roottest=='user')      nfactors1 <- Nfacts 
+if (roottest=='user')      Nfactors1 <- Nfacts 
 
 warnnf1 <- 0
-if (nfactors1==0) {
-	nfactors1 <- 1
+if (Nfactors1==0) {
+	Nfactors1 <- 1
 	warnnf1 <- 1 
 }
 
 
 # factor extraction
 if (extract=='PCA') {
-	pca.out <- PCA( rcore, corkind=corkind, nfactors=nfactors1, rotate='none', display=FALSE )
+	pca.out <- PCA( rcore, corkind=corkind, Nfactors=Nfactors1, rotate='none', display=FALSE )
 	lding1 <- pca.out$loadingsNOROT
 }
 if (extract=='PAF')  {
-	paf.out <- PA_FA( rcore, corkind=corkind, nfactors=nfactors1, iterpaf=iterpaf, rotate='none', display=FALSE )
+	paf.out <- PA_FA( rcore, corkind=corkind, Nfactors=Nfactors1, iterpaf=iterpaf, rotate='none', display=FALSE )
 	lding1 <- paf.out$loadings
 }
 if (extract=='ML') {	
-	maxlike.out <- MAXLIKE_FA(rcore, nfactors=nfactors1, tolerml=tolerml, iterml=iterml, rotate='none', display=FALSE)
+	maxlike.out <- MAXLIKE_FA(rcore, Nfactors=Nfactors1, tolerml=tolerml, iterml=iterml, rotate='none', display=FALSE)
 	lding1 <- maxlike.out$loadingsNOROT
 }
-#if (extract=='image') lding1 <- IMAGE_FA(rcore, nfactors1, "loadings")
+#if (extract=='image') lding1 <- IMAGE_FA(rcore, Nfactors1, "loadings")
 
 
 
 # rotation, which also gives the factor intercorrelations
-if (nfactors1==1)  rff <- 1 
-if (nfactors1 > 1) {
+if (Nfactors1==1)  rff <- 1 
+if (Nfactors1 > 1) {
 	if (rotate=='promax') {
         promax.out <- paramap::PROMAX(lding1, ppower=ppower, display=FALSE) 
         lding1 <- promax.out$structure
@@ -148,9 +148,9 @@ lding1 <- cbind(lding1)
 
 # for regular extension analysis
 # supermatrix: core variables, extension variables, & the factor loadings
-sup <- matrix(0, (ncol(rdata)+nfactors1) , (ncol(rdata)+nfactors1) )
+sup <- matrix(0, (ncol(rdata)+Nfactors1) , (ncol(rdata)+Nfactors1) )
 sup[1:nrow(rdata),1:ncol(rdata)] <- rdata
-sup[ (nrow(sup)-(nfactors1-1)):nrow(sup), 1:nrow(lding1) ] <- t(lding1[1:Ncore,])
+sup[ (nrow(sup)-(Nfactors1-1)):nrow(sup), 1:nrow(lding1) ] <- t(lding1[1:Ncore,])
 
 # correlations between extension variables & the factors
 ppp <- matrix(0, nrow(sup) , ncol(sup) )
@@ -163,12 +163,12 @@ for (lupe  in 1:Ncore) {
 pvo <- ppp[1:Ncore,1:Ncore]
 peo <- ppp[(Ncore+1):(Ncore+Next),1:Ncore]
 pfo <- ppp[ (Ncore+Next+1):(nrow(ppp)) , 1:Ncore]
-if (nfactors1 > 1)  sef1 <- peo %*% t(pfo)
-if (nfactors1 == 1) sef1 <- peo %*% pfo
+if (Nfactors1 > 1)  sef1 <- peo %*% t(pfo)
+if (Nfactors1 == 1) sef1 <- peo %*% pfo
 
 
 # higher order factor/extension analysis
-if (higherorder==TRUE & nfactors1 > 1 & rotate=='promax') {
+if (higherorder==TRUE & Nfactors1 > 1 & rotate=='promax') {
 
 # eigenvalues for the higher order variables (factors)
 evals2 <- cbind(eigen(rff)$values)     
@@ -178,50 +178,50 @@ fits2 <- ROOTFIT( rff, corkind='pearson', Ncases=Ncases, extract=extract, verbos
 
 
 # number of factors  for the higher order factors
-if (roottest=='Nsalient')  nfactors2 <- SALIENT(rff) 
+if (roottest=='Nsalient')  Nfactors2 <- SALIENT(rff) 
 
 if (roottest=='parallel')  {
 	nfs <- RAWPAR(rff, randtype='generated', extract=extract, Ndatasets=Ndatasets, percentile=percentile,
                   corkindRAND=corkindRAND, Ncases=Ncases, display=FALSE)
-	nfactors2 <- nfs$nfPA
+	Nfactors2 <- nfs$nfPA
 }
 if (roottest=='MAP') {
 	nfs <- MAP(rff, display=FALSE)
-	nfactors2 <- nfs$nfMAP
+	Nfactors2 <- nfs$nfMAP
 	} 
 
-if (roottest=='SEscree')   nfactors2 <- SESCREE(rff) 
+if (roottest=='SEscree')   Nfactors2 <- SESCREE(rff) 
 
-if (roottest=='#evals>1')  nfactors2 <- NEVALSGT1(rff) 
+if (roottest=='#evals>1')  Nfactors2 <- NEVALSGT1(rff) 
 
-if (roottest=='user')      nfactors2 <- Nfacts 
+if (roottest=='user')      Nfactors2 <- Nfacts 
 
 warnnf2 <- 0
-if (nfactors2==0) { 
-	nfactors2 <- 1
+if (Nfactors2==0) { 
+	Nfactors2 <- 1
 	warnnf2 <- 1 
 }
 
 
 # factor extraction
 if (extract=='PCA') {
-	pca.out <- PCA( rff, corkind=corkind, nfactors=nfactors2, rotate='none', display=FALSE )
+	pca.out <- PCA( rff, corkind=corkind, Nfactors=Nfactors2, rotate='none', display=FALSE )
 	lding2 <- pca.out$loadingsNOROT
 }
 if (extract=='PAF')  {
-	paf.out <- PA_FA( rff, corkind=corkind, nfactors=nfactors2, iterpaf=iterpaf, rotate='none', display=FALSE )
+	paf.out <- PA_FA( rff, corkind=corkind, Nfactors=Nfactors2, iterpaf=iterpaf, rotate='none', display=FALSE )
 	lding2 <- paf.out$loadings
 }
 if (extract=='ML') {	
-	maxlike.out <- MAXLIKE_FA(rff, nfactors=nfactors2, tolerml=tolerml, iterml=iterml, rotate='none', display=FALSE)
+	maxlike.out <- MAXLIKE_FA(rff, Nfactors=Nfactors2, tolerml=tolerml, iterml=iterml, rotate='none', display=FALSE)
 	lding2 <- maxlike.out$loadingsNOROT
 }
-#if (extract=='image') lding2 <- IMAGE_FA(rff, nfactors2, "loadings")
+#if (extract=='image') lding2 <- IMAGE_FA(rff, Nfactors2, "loadings")
 
 
 
 # rotation, which also gives the factor intercorrelations
-if (nfactors1 > 2) {
+if (Nfactors1 > 2) {
 	if (rotate=='promax') {
         promax.out <- paramap::PROMAX(lding2, ppower=ppower, display=FALSE) 
         lding2 <- promax.out$structure
@@ -232,7 +232,7 @@ if (nfactors1 > 2) {
 
 
 # supermatrix: core variables, extension variables, & the factor loadings
-sup <- matrix(0, (nfactors1+Ncore+Next+nfactors2) , (nfactors1+Ncore+Next+nfactors2) )
+sup <- matrix(0, (Nfactors1+Ncore+Next+Nfactors2) , (Nfactors1+Ncore+Next+Nfactors2) )
 
 rff    <- cbind(rff)
 lding2 <- cbind(lding2)
@@ -241,18 +241,18 @@ lding2 <- cbind(lding2)
 sup[1:nrow(rff),1:ncol(rff)] <- rff
 
 # the first set of extension variables
-sup[ (nfactors1+1):(nfactors1+Ncore), 1:(ncol(lding1)) ] <- lding1
+sup[ (Nfactors1+1):(Nfactors1+Ncore), 1:(ncol(lding1)) ] <- lding1
 
 # the possible additional extension variables
 if (Next > 0) {
-	sup[ (nfactors1+Ncore+1):(nfactors1+Ncore+Next) , 1:nfactors2 ] <-  
-    rdata[ (Ncore+1):(Ncore+Next), 1:nfactors2 ] }
+	sup[ (Nfactors1+Ncore+1):(Nfactors1+Ncore+Next) , 1:Nfactors2 ] <-  
+    rdata[ (Ncore+1):(Ncore+Next), 1:Nfactors2 ] }
 
 # the loadings (correlations) from the higher order factor analysis
-sup[ (nrow(sup)-(nfactors2-1)):nrow(sup), 1:nrow(lding2) ] <- t(lding2)
+sup[ (nrow(sup)-(Nfactors2-1)):nrow(sup), 1:nrow(lding2) ] <- t(lding2)
 
 Next2 <- Ncore + Next;  
-Ncore2 <- nfactors1; 
+Ncore2 <- Nfactors1; 
 
 # correlations between extension variables & the higher order factors
 ppp <- matrix(0, nrow(sup) , ncol(sup))
@@ -275,7 +275,7 @@ sef <- peo %*% pfo
 	# sef <- peo * pfo[1,]
 }
 
-if (higherorder==FALSE | (higherorder==TRUE & nfactors1 == 1) | ( higherorder==TRUE & rotate != 'promax') ) {
+if (higherorder==FALSE | (higherorder==TRUE & Nfactors1 == 1) | ( higherorder==TRUE & rotate != 'promax') ) {
 	cat("\nEigenvalues & Fit Coefficients for the Core Variables:\n\n")
 	print(round(fits1,2))
 
@@ -284,11 +284,11 @@ if (higherorder==FALSE | (higherorder==TRUE & nfactors1 == 1) | ( higherorder==T
 		cat("\n         The number of factors was therefore set at 1.") 
 	}
 
-	cat("\nNumber of factors in the core variables = ", nfactors1, "\n" )
+	cat("\nNumber of factors in the core variables = ", Nfactors1, "\n" )
 
-	if (nfactors1 == 1)  cat("\n\nWARNING: There was only one factor, rotation not performed\n") 
+	if (Nfactors1 == 1)  cat("\n\nWARNING: There was only one factor, rotation not performed\n") 
 
-	if (rotate == 'promax' & nfactors1 > 1) {
+	if (rotate == 'promax' & Nfactors1 > 1) {
 		cat("\nFactor Intercorrelations:\n")
 		print(round(rff,2))
 	}
@@ -313,7 +313,7 @@ if (higherorder==FALSE | (higherorder==TRUE & nfactors1 == 1) | ( higherorder==T
 }
 
 # Warning message
-if (higherorder==TRUE & nfactors1 == 1) {
+if (higherorder==TRUE & Nfactors1 == 1) {
 	cat("\n\nWARNING: Higher Order Factor/Extension Analysis was requested, but there was")
 	cat("\n         only one factor in the lower-order data.")  
 	cat("\n         The higher order analyses were not performed.");cat("\n  ") 
@@ -326,11 +326,11 @@ if (higherorder==TRUE & rotate != 'promax') {
 	cat("\n         The higher order analyses were not performed.");cat("\n  ") 
 }
 
-if (higherorder==TRUE & nfactors1 > 1 & rotate == 'promax') {
+if (higherorder==TRUE & Nfactors1 > 1 & rotate == 'promax') {
 	cat("\nEigenvalues & Fit Coefficients for the First Set of Core Variables:\n\n")
 	print(round(fits1,2))
 
-	cat("\nNumber of Factors in the First Set of Core Variables = ", nfactors1 )
+	cat("\nNumber of Factors in the First Set of Core Variables = ", Nfactors1 )
 	cat("\n\nEigenvalues & Fit Coefficients for the Higher Order Factor Analysis:\n\n")
 	print(round(fits2,2))
 
@@ -339,8 +339,8 @@ if (higherorder==TRUE & nfactors1 > 1 & rotate == 'promax') {
 		cat("\n         The number of factors was therefore set at 1.")
 		}
 
-	cat("\n\nNumber of Factors for the Higher Order Factor Analysis = ", nfactors2) 
-	if (nfactors2 == 1) {
+	cat("\n\nNumber of Factors for the Higher Order Factor Analysis = ", Nfactors2) 
+	if (Nfactors2 == 1) {
 		cat("\n\nWARNING: There was only one higher order factor, rotation not performed") 
 	}
 

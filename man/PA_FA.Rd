@@ -3,7 +3,7 @@
 \title{principal axis (common) factor analysis}
 \description{principal axis (common) factor analysis with squared multiple 
 	correlations as the initial communality estimates}
-\usage{PA_FA(data, corkind, nfactors, iterpaf, rotate, ppower, display)}
+\usage{PA_FA(data, corkind, Nfactors, iterpaf, rotate, ppower, display)}
 \arguments{
   \item{data}{
   \code{}An all-numeric dataframe where the rows are cases & the columns are the 
@@ -13,7 +13,7 @@
   \code{}The kind of correlation matrix to be used if data is not a correlation matrix. 
   The options are 'pearson', 'kendall', 'spearman', and 'polychoric'. Required only if 
   the entered data is not a correlation matrix.}
-  \item{nfactors}{
+  \item{Nfactors}{
   \code{}The number of factors to extract.}
   \item{iterpaf}{
   \code{}The maximum number of iterations.}
@@ -35,6 +35,6 @@
 }
 \author{Brian P. O'Connor }
 \examples{
-PA_FA(data_RSE, corkind="pearson", nfactors = 2, iterpaf = 50, 
+PA_FA(data_RSE, corkind="pearson", Nfactors = 2, iterpaf = 50, 
       rotate='promax', ppower=3, display="yes")
 }

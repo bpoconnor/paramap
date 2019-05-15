@@ -1,5 +1,5 @@
 
-ROOTFIT <- function ( data, corkind='pearson', Ncases, extract='PAF', verbose = 'TRUE' ) {
+ROOTFIT <- function ( data, corkind='pearson', Ncases=NULL, extract='PAF', verbose = 'TRUE' ) {
 
 # determine whether data is a correlation matrix
 if ( nrow(data) == ncol(data) ) {
@@ -7,10 +7,12 @@ if ( nrow(data) == ncol(data) ) {
 		
 if (datakind == 'correlations') { 
 	cormat <- data 	
+	ctype <- 'from user'
 	if (verbose=='TRUE') cat("\n\nThe entered data is a correlation matrix.")	
 	if(is.null(Ncases)) {
 		cat('\n\nA correlation matrix was entered as input without specifying the number of cases.\n\n')
-		cat('An error message will be generated. Enter a value for Ncases.\n\n\n')}
+		cat('An error message will be generated. Enter a value for Ncases.\n\n\n')
+	}
 	n.obs <- Ncases
 }
 
@@ -59,7 +61,7 @@ if (fm=='mle' | fm=='pa') {
 
 		#faOUT <- factanal(covmat=cormat, n.obs=Ncases, factors=root, rotation='none', maxit=1000)
        
-		faOUT  <- psych::fa(cormat, n.obs=n.obs, nfactors=root, rotate="none", fm=fm, max.iter=500, SMC=FALSE)
+		faOUT  <- psych::fa(cormat, n.obs=n.obs, nfactors=root, rotate="none", fm=fm, max.iter=500, SMC=TRUE)
 
 
 		chisq <- faOUT$STATISTIC
@@ -153,14 +155,15 @@ if (fm=='pc') {
 
 
 		# fits[root,3:7] <- cbind(fitRevelle, fitRevelle.off, mnsqdresid, rmsr, GFI)
-		# colnames(fits) <- c("Root","  Eigenvalue","   Revelle.fit","   fitRevelle.off", "  mnsqdresid", "     RMSR","      GFI")
+		# colnames(fits) <- c("Root","  Eigenvalue","   Revelle.fit","   fitRevelle.off",
+		# "  mnsqdresid", "     RMSR","      GFI")
 		# rownames(fits) <- matrix((""),nrow(fits),1)
 
 
 		fits[root,3:5] <- cbind(rmsr, GFI, fitRevelle)
-		colnames(fits) <- c("Root","  Eigenvalue","     RMSR","      GFI","   Revelle.fit")
-		rownames(fits) <- matrix((""),nrow(fits),1)
 	}
+	colnames(fits) <- c("Root","  Eigenvalue","     RMSR","      GFI","   Revelle.fit")
+	rownames(fits) <- matrix((""),nrow(fits),1)
 }
 
 

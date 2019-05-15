@@ -2,7 +2,7 @@
 
 # Maximum likelihood factor analysis algorithm -- Marcus, 1993
 
-MAXLIKE_FA <- function (data, corkind='pearson', nfactors=2, tolerml=.001, iterml=100, rotate='promax', ppower=3, display=TRUE ) {
+MAXLIKE_FA <- function (data, corkind='pearson', Nfactors=NULL, tolerml=.001, iterml=100, rotate='promax', ppower=3, display=TRUE ) {
 
 cnoms <- colnames(data) # get colnames
 
@@ -10,13 +10,11 @@ cnoms <- colnames(data) # get colnames
 if ( nrow(data) == ncol(data) ) {
 	if ( all(diag(data==1)) ) {datakind = 'correlations'}} else{ datakind = 'notcorrels'}
 
-
 if (datakind == 'correlations')  {
 	cormat <- data 
 	ctype <- 'from user'
 }
  
-
 if (datakind == 'notcorrels') {
 	Ncases <- nrow(data)
 	if (anyNA(data) == TRUE) {
@@ -29,16 +27,21 @@ if (datakind == 'notcorrels') {
 	if (corkind=='polychoric')  {cormat <- POLYCHORIC_R(data);            ctype <- 'Polychoric'}
 }
 
+if (is.null(Nfactors)) {		
+	nfactsMAP <- MAP(cormat, display='no')
+	Nfactors <- nfactsMAP$nfMAP
+	NfactorsWasNull <- TRUE
+}
 
 Rho <- cormat
-k <- nfactors
+k <- Nfactors
 p <- nrow(Rho)
 
 # preliminary singular value decomposition of Rho
 L <- diag(svd(Rho) $d)
 A <- svd(Rho) $u
 
-if (nfactors == 1) { A1 <- A[,1:k] * sqrt(L[1:k,1:k])
+if (Nfactors == 1) { A1 <- A[,1:k] * sqrt(L[1:k,1:k])
 }else { A1 <- A[,1:k] %*% sqrt(L[1:k,1:k]) }   # Prin. Comp. loadings 
 
 Uni <- diag(diag(Rho-A1%*%t(A1)))     # Uniqueness matrix
@@ -73,7 +76,7 @@ Resid <- Rho - A1%*%t(A1)
 
 loadings <- as.matrix(A1)
 rownames(loadings) <- cnoms
-colnames(loadings) <-  c(paste("  Factor ", 1:nfactors, sep="") )
+colnames(loadings) <-  c(paste("  Factor ", 1:Nfactors, sep="") )
 
 evalmax <- as.matrix(diag(L))
 rownames(evalmax) <- 1:nrow(evalmax)
@@ -83,9 +86,9 @@ if (rotate=='none')  { maxlikeOutput <- list( eigenvalues=evalmax, loadingsNOROT
 
 if (rotate=='promax' | rotate=='varimax') {
 
-	if (nfactors==1) { maxlikeOutput <- list( eigenvalues=evalmax, loadingsNOROT=loadings, loadingsROT=loadings, structure=loadings, pattern=loadings ) } 
+	if (Nfactors==1) { maxlikeOutput <- list( eigenvalues=evalmax, loadingsNOROT=loadings, loadingsROT=loadings, structure=loadings, pattern=loadings ) } 
 
-	if (nfactors > 1) {
+	if (Nfactors > 1) {
 		if (rotate=='varimax') { 
 			loadingsROT <- paramap::VARIMAX(loadings,display=FALSE)
 			maxlikeOutput <- list( eigenvalues=evalmax, loadingsNOROT=loadings, loadingsROT=loadingsROT ) 
@@ -99,13 +102,17 @@ if (rotate=='promax' | rotate=='varimax') {
 if (display == TRUE) {
 	cat("\n\nMaximum likelihood factor analysis:\n\n")
 	cat("\nSpecified kind of correlations for this analysis: ", ctype, "\n")
+	if (NfactorsWasNull <- TRUE) {
+		cat('\nNfactors was not specified and so the MAP test was conducted to determine')
+		cat('\nthe number of factors to extract: Nfactors =', Nfactors,'\n\n')		
+	}
 	cat("\n\nNumber of iterations = ", i, "\n\n")	
 	print(round(evalmax,2));cat("\n\n")
 	print(round(Com,2))
 	cat("\n\nUnrotated Maximum Likelihood Loadings:\n\n")
-	print(round(loadings[,1:nfactors],2));cat("\n\n")
-	if (nfactors==1) { cat("\n\nNo rotation because there is only one factor\n\n") }
-	if (nfactors > 1) {
+	print(round(loadings[,1:Nfactors],2));cat("\n\n")
+	if (Nfactors==1) { cat("\n\nNo rotation because there is only one factor\n\n") }
+	if (Nfactors > 1) {
 		if (rotate=='none')    {cat("\n\nRotation Procedure:  No Rotation") }
 		if (rotate=='varimax') {cat("\n\nVarimax Rotated Loadings:\n\n"); print(round(loadingsROT,2));cat("\n\n") }
 		if (rotate=='promax')  { 

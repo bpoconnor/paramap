@@ -2,14 +2,14 @@ Package: paramap
 Type: Package
 Title: Factor Analysis Functions for Assessing Dimensionality
 Version: 1.9
-Date: 2019-03-29
+Date: 2019-05-14
 Author: Brian P. O'Connor 
 Maintainer: Brian P. O'Connor  <brian.oconnor@ubc.ca>
 Description: Factor analysis-related functions and datasets for assessing dimensionality.
-Imports: stats, utils, psych, polycor
+Imports: stats, psych, polycor
 Suggests: lattice
 LazyLoad: yes
 LazyData: yes
 License: GPL (>= 2)
 NeedsCompilation: no
-Packaged: 2018-11-04 08:21:32 UTC; brianoconnor
+Packaged: 2019-03-30 06:54:10 UTC; brianoconnor

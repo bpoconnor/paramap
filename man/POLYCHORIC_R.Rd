@@ -13,7 +13,7 @@
   	    'Fox' for the polycor package.}
 }
 \details{Applying familiar factor analysis procedures to item-level data can produce 
-	misleading or un-interpretable results. Common factor analysis, maximum likelihood 
+	misleading or uninterpretable results. Common factor analysis, maximum likelihood 
 	factor analysis, and principal components analysis produce meaningful results 
 	only if the data are continuous and multivariate normal.  Item-level data 
 	almost never meet these requirements.

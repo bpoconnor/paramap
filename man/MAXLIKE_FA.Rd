@@ -2,7 +2,7 @@
 \alias{MAXLIKE_FA}
 \title{maximum likelihood factor analysis}
 \description{maximum likelihood factor analysis}
-\usage{MAXLIKE_FA(data, corkind, nfactors, tolerml, iterml, rotate, ppower, display)}
+\usage{MAXLIKE_FA(data, corkind, Nfactors, tolerml, iterml, rotate, ppower, display)}
 \arguments{
   \item{data}{
   \code{}An all-numeric dataframe where the rows are cases & the columns are the 
@@ -12,7 +12,7 @@
   \code{}The kind of correlation matrix to be used if data is not a correlation matrix. 
   The options are 'pearson', 'kendall', 'spearman', and 'polychoric'. Required only 
   if the entered data is not a correlation matrix.}
-  \item{nfactors}{
+  \item{Nfactors}{
   \code{}The number of factors to extract.}
   \item{tolerml}{
   \code{}The tolerance level.}
@@ -36,6 +36,6 @@
 }
 \author{Brian P. O'Connor }
 \examples{
-MAXLIKE_FA(data_RSE, corkind='pearson', nfactors = 2, 
+MAXLIKE_FA(data_RSE, corkind='pearson', Nfactors = 2, 
            tolerml = .001, iterml = 50, rotate='promax', ppower=3, display=TRUE)
 }

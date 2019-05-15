@@ -38,17 +38,17 @@ index of the degree of similarity between between the aligned loading matrices
 \author{Brian P. O'Connor}
 \examples{
 # RSE data
-loadings <- PCA(data_RSE[1:150,],   corkind='pearson', nfactors = 3, 
+loadings <- PCA(data_RSE[1:150,],   corkind='pearson', Nfactors = 3, 
                 rotate='varimax', display=FALSE)
-target   <- PCA(data_RSE[151:300,], corkind='pearson', nfactors = 3, 
+target   <- PCA(data_RSE[151:300,], corkind='pearson', Nfactors = 3, 
                 rotate='varimax', display=FALSE)
 CONGRUENCE(target$loadingsROT, loadings$loadingsROT, display=TRUE)
 
 \dontrun{
 # NEO-PI-R data
-loadings <- PCA(data_NEOPIR[1:500,], corkind='pearson', nfactors = 3, 
+loadings <- PCA(data_NEOPIR[1:500,], corkind='pearson', Nfactors = 3, 
                 rotate='varimax', display=FALSE)
-target <- PCA(data_NEOPIR[501:1000,], corkind='pearson', nfactors = 3, 
+target <- PCA(data_NEOPIR[501:1000,], corkind='pearson', Nfactors = 3, 
               rotate='varimax', display=FALSE)
 CONGRUENCE(target$loadingsROT, loadings$loadingsROT, display=TRUE)
 }

@@ -37,9 +37,9 @@ fmfm4[1,2] <- (sum(sum(rdata^2))-nvars)/(nvars*(nvars-1))
 fmfm4[1,3] <- (sum(sum(rdata^4))-nvars)/(nvars*(nvars-1))
 
 
-pb <- utils::txtProgressBar(min = 0, max = (nvars - 1), style = 3) # create progress bar
+# pb <- utils::txtProgressBar(min = 0, max = (nvars - 1), style = 3) # create progress bar
 for (m in 1:(nvars - 1)) {
-    Sys.sleep(0.1) # for the progress bar
+#     Sys.sleep(0.1) # for the progress bar
 	a <- loadings[,1:m]
 	partcov <- as.matrix(rdata - tcrossprod(a,a))  # faster than as.matrix(rdata - (a %*% t(a)))
 	d <- diag (  (1 / sqrt(diag(partcov)))  )
@@ -47,9 +47,9 @@ for (m in 1:(nvars - 1)) {
 	fmfm4[m+1,2] <- (sum(sum(pr^2))-nvars)/(nvars*(nvars-1))
 	fmfm4[m+1,3] <- (sum(sum(pr^4))-nvars)/(nvars*(nvars-1))
 	rm(a,partcov,d,pr) # remove large matrices to free up memory re: R creates duplicates
-    utils::setTxtProgressBar(pb, m) # update progress bar
+#     utils::setTxtProgressBar(pb, m) # update progress bar
 }
-close(pb)
+# close(pb)
 
 
 # identifying the smallest fm values & their locations

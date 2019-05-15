@@ -2,7 +2,7 @@
 \alias{IMAGE_FA}
 \title{image factor analysis}
 \description{image factor analysis}
-\usage{IMAGE_FA(data, corkind, nfactors, rotate, ppower, display)}
+\usage{IMAGE_FA(data, corkind, Nfactors, rotate, ppower, display)}
 \arguments{
   \item{data}{
   \code{}An all-numeric dataframe where the rows are cases & the columns are the variables, 
@@ -12,7 +12,7 @@
   \code{}The kind of correlation matrix to be used if data is not a correlation matrix. 
   The options are 'pearson', 'kendall', 'spearman', and 'polychoric'. Required only 
   if the entered data is not a correlation matrix.}
-  \item{nfactors}{
+  \item{Nfactors}{
   \code{}The number of factors to extract.}
   \item{rotate}{
   \code{}The factor rotation method. The options are: 'promax', 'varimax', and 'none'.}
@@ -32,5 +32,5 @@
 }
 \author{Brian P. O'Connor }
 \examples{
-IMAGE_FA(data_NEOPIR, corkind='pearson', nfactors=5, rotate='varimax', ppower=3, display=TRUE)
+IMAGE_FA(data_NEOPIR, corkind='pearson', Nfactors=5, rotate='varimax', ppower=3, display=TRUE)
 }

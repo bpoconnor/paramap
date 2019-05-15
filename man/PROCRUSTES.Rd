@@ -47,8 +47,8 @@
 \author{Brian P. O'Connor}
 \examples{
 # RSE data
-loadings <- PCA(data_RSE[1:150,],   nfactors = 2, rotate='varimax', display=FALSE)
-target   <- PCA(data_RSE[151:300,], nfactors = 2, rotate='varimax', display=FALSE)
+loadings <- PCA(data_RSE[1:150,],   Nfactors = 2, rotate='varimax', display=FALSE)
+target   <- PCA(data_RSE[151:300,], Nfactors = 2, rotate='varimax', display=FALSE)
 
 PROCRUSTES(loadings$loadingsROT, target$loadingsROT, type = 'orthogonal', display=TRUE)
 }

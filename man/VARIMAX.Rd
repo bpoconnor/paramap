@@ -13,7 +13,7 @@
 \author{Brian P. O'Connor }
 \examples{
 \dontrun{
-loadings <- PCA(data_NEOPIR, corkind='pearson', nfactors = 5, rotate='none', display=TRUE)
+loadings <- PCA(data_NEOPIR, corkind='pearson', Nfactors = 5, rotate='none', display=TRUE)
 
 VARIMAX(loadings, display=TRUE)
 }

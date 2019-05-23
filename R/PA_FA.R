@@ -70,25 +70,21 @@ colnames(evalpaf) <- "Eigenvalues"
 if (rotate=='none')  { pafOutput <- list( eigenvalues=evalpaf, loadingsNOROT=loadings ) }
 
 if (rotate=='promax' | rotate=='varimax') {
-	
+		
 	if (Nfactors==1) { 
 		pafOutput <- list( eigenvalues=evalpaf, loadingsNOROT=loadings, loadingsROT=loadings, structure=loadings, pattern=loadings ) 
-		} 
-
+	} 
 	if (Nfactors > 1) {
 		if (rotate=='varimax') { 
 			loadingsROT <- paramap::VARIMAX(loadings,display=FALSE)
 			pafOutput <- list( eigenvalues=evalpaf, loadingsNOROT=loadings, loadingsROT=loadingsROT )  
-			} 
-	  # if (rotate=='varimax') { 
-			# loadingsROT <- stats::VARIMAX(loadings)
-		    # pafOutput <- list( eigenvalues=evalpaf, loadingsNOROT=loadings, loadingsROT=loadingsROT$loadings )  
-			# } 
+		} 
 		if (rotate=='promax')  { 
 			loadingsROT <- paramap::PROMAX(loadings,display=FALSE)
 			pafOutput <- list( eigenvalues=evalpaf, structure=loadingsROT$structure, pattern=loadingsROT$pattern, correls=loadingsROT$correls ) 
-			}
-}}
+		}
+	}
+}
 
 if (display == TRUE) {
 	cat("\n\nPrincipal Axis Factor Analysis\n\n")

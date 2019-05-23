@@ -1,8 +1,10 @@
 
 ROOTFIT <- function ( data, corkind='pearson', Ncases=NULL, extract='PAF', verbose = 'TRUE' ) {
 
+Nvars <- ncol(data)
+
 # determine whether data is a correlation matrix
-if ( nrow(data) == ncol(data) ) {
+if ( nrow(data) == Nvars ) {
 	if ( all(diag(data==1))  ) {datakind = 'correlations'}} else{datakind = 'notcorrels'} 
 		
 if (datakind == 'correlations') { 
@@ -17,19 +19,16 @@ if (datakind == 'correlations') {
 }
 
 if (datakind == 'notcorrels') {
-	n.obs <- nrow(data)
+	Ncases <- n.obs <- nrow(data)
 	if (anyNA(data) == TRUE) {
 		data <- na.omit(data)
 		cat('\n\nCases with missing values were found and removed from the data matrix.\n\n')
 	}
-	if (corkind=='pearson')     { cormat <- cor(data, method="pearson");  ctype <- 'Pearson' }
-	if (corkind=='kendall')     { cormat <- cor(data, method="kendall");  ctype <- 'Kendall' }
-	if (corkind=='spearman')    { cormat <- cor(data, method="spearman"); ctype <- 'Spearman' }
-	if (corkind=='polychoric')  { cormat <- POLYCHORIC_R(data);           ctype <- 'Polychoric' }
+	if (corkind=='pearson')     cormat <- cor(data, method="pearson");  ctype <- 'Pearson' 
+	if (corkind=='kendall')     cormat <- cor(data, method="kendall");  ctype <- 'Kendall' 
+	if (corkind=='spearman')    cormat <- cor(data, method="spearman"); ctype <- 'Spearman' 
+	if (corkind=='polychoric')  cormat <- POLYCHORIC_R(data);           ctype <- 'Polychoric' 
 }
-
-Ncases <- nrow(data)
-Nroots <- ncol(data)
 
  
 # factor extraction
@@ -40,17 +39,18 @@ if (extract=='ML')     fm <- 'mle'
 
 if (fm=='mle' | fm=='pa') {
 
-	fits <- matrix(-9999,Nroots,12)
+	fits <- matrix(-9999,20,12)
 
-	fits[,1] <- 1:Nroots
+	fits[,1] <- 1:20
 
 	evals <- eigen(cormat)$values
-	fits[,2] <- evals
+	fits[,2] <- evals[1:20]
 
 
-	for (root in 1:(Nroots)) {
+#	for (root in 1:(Nvars)) {
+	for (root in 1:20) {
 
-		dof <- 0.5 * ((ncol(data) - root)^2 - ncol(data) - root)
+		dof <- 0.5 * ((Nvars - root)^2 - Nvars - root)
 		if (dof < 1) {
 		fits <- fits[1:(root-1),]
 		if (verbose == 'TRUE') {
@@ -61,7 +61,7 @@ if (fm=='mle' | fm=='pa') {
 
 		#faOUT <- factanal(covmat=cormat, n.obs=Ncases, factors=root, rotation='none', maxit=1000)
        
-		faOUT  <- psych::fa(cormat, n.obs=n.obs, nfactors=root, rotate="none", fm=fm, max.iter=500, SMC=TRUE)
+		faOUT  <- psych::fa(cormat, n.obs=n.obs, nfactors=root, rotate="none", fm=fm, max.iter=1000, SMC=TRUE)
 
 
 		chisq <- faOUT$STATISTIC
@@ -91,7 +91,7 @@ if (fm=='mle' | fm=='pa') {
 		rmsr <- sqrt(mean(residuals^2)) # rmr is perhaps the more common term for this stat
 		# no srmsr computation because it requires the SDs for the variables in the matrix
 
-		# GFI from Waller's MicroFact: 1 - mean-squared residual / mean-squared correlation
+		# GFI from Waller's MicroFact: 1 - (mean-squared residual / mean-squared correlation)
 		correls <- residuals <- as.matrix(cormat[upper.tri(cor(data))])
 		mnsqdcorrel <- mean(correls^2) 
 		GFI <- 1 - (mnsqdresid / mnsqdcorrel)
@@ -127,15 +127,15 @@ if (fm=='mle' | fm=='pa') {
 
 if (fm=='pc') {
 
-	fits <- matrix(-9999,Nroots,5)
+	fits <- matrix(-9999,20,5)
 
-	fits[,1] <- 1:Nroots
+	fits[,1] <- 1:20
 
 	evals <- eigen(cormat)$values
 	fits[,2] <- evals
 
 
-	for (root in 1:(Nroots)) {
+	for (root in 1:(Nvars)) {
        
 		pcaout  <- psych::principal(cormat, n.obs=n.obs, nfactors=root, rotate="none", fm=fm)
 
@@ -178,7 +178,7 @@ if (verbose == 'TRUE') {
 	if (extract=='ML')    { cat("\n\nExtraction Method: Maximum Likelihood Estimation\n") } 
 
 	cat("\nThe number of cases      = ", Ncases, "\n")
-	cat("\nThe number of variables  = ", Nroots, "\n\n\n") 
+	cat("\nThe number of variables  = ", Nvars,  "\n\n\n") 
 
 	print(round(fits,3))
 }
@@ -310,10 +310,10 @@ cat("Methods, 6(1), 53-60.\n\n")
 
 cat("Kenny, D. A. (2015). Measuring model fit. http://davidaKenny.net/cm/fit.htm\n\n")
 
-cat("Schermelleh-Engel, K., & Moosbrugger , H. (2003). Evaluating the Fit of\n")
+cat("Schermelleh-Engel, K., & Moosbrugger, H. (2003). Evaluating the Fit of\n")
 cat("Structural Equation Models: Tests of Significance and Descriptive\n")
-cat("Goodness-of-Fit Measures. Methods of Psychological Research Online 2003, Vol.8,\n")
-cat("No.2, pp. 23-74. http://www.mpr-online.de\n\n\n\n")
+cat("Goodness-of-Fit Measures. Methods of Psychological Research Online, Vol.8(2),\n")
+cat("pp. 23-74. http://www.mpr-online.de\n\n\n\n")
 }
 
 

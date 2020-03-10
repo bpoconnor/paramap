@@ -2,24 +2,24 @@
 
 # Promax rotation -- Marcus, 1993
 
-PROMAX <- function (loadings, ppower=4, display=TRUE) {
+PROMAX <- function (loadings, ppower=4, verbose=TRUE) {
 
 # the loadings are first rotated to an orthogonal varimax solution, then the
 # orthogonality of the factors is relaxed to better fit simple structure 
 # (Mulaik 1972 p 300; Rummel 1970 p 419)
 
 
-if (is.list(loadings) == 'TRUE') {loadings <- loadings$loadings}
+if (is.list(loadings) == 'TRUE') loadings <- loadings$loadings
 
-if (ncol(loadings) == 1 )  {	
-	promaxOutput <- list( structure=loadings )
+if (ncol(loadings) == 1)  {	
+	promaxOutput <- list(structure=loadings)
 	return(invisible(promaxOutput))
-	if (display == TRUE) cat("\n\nWARNING: There was only one factor. Rotation was not performed.\n")
+	if (verbose == TRUE) cat("\n\nWARNING: There was only one factor. Rotation was not performed.\n")
 }
 
 if (ncol(loadings) > 1) {
 
-	loadings <- as.matrix(VARIMAX(loadings,display=FALSE))
+	loadings <- as.matrix(VARIMAX(loadings,verbose=FALSE))
 
 	B <- loadings
 
@@ -45,13 +45,13 @@ if (ncol(loadings) > 1) {
 
 	Phir <- t(Tr) %*% Tr    # Correlations between reference axes
 
-	colnames(Sp)   <-  c(paste("  Factor ", 1:ncol(Sp),   sep="") )
-	colnames(Pp)   <-  c(paste("  Factor ", 1:ncol(Pp),   sep="") )
-	colnames(Phip) <-  c(paste("  Factor ", 1:ncol(Phip), sep="") )
-	rownames(Phip) <-  c(paste("  Factor ", 1:ncol(Phip), sep="") )
+	colnames(Sp)   <-  c(paste("  Factor ", 1:ncol(Sp),   sep=""))
+	colnames(Pp)   <-  c(paste("  Factor ", 1:ncol(Pp),   sep=""))
+	colnames(Phip) <-  c(paste("  Factor ", 1:ncol(Phip), sep=""))
+	rownames(Phip) <-  c(paste("  Factor ", 1:ncol(Phip), sep=""))
 
 
-	if (display == TRUE) {
+	if (verbose == TRUE) {
 		# cat("\n\nUnrotated Loadings:\n\n")
 		# print(round(B,2))
 		cat("\n\nPromax Rotation Structure Matrix:\n\n")
@@ -62,7 +62,7 @@ if (ncol(loadings) > 1) {
 		print(round(Phip,2));cat("\n\n")
 	}
 
-	promaxOutput <- list( structure=Sp, pattern=Pp, correls=Phip  )
+	promaxOutput <- list(structure=Sp, pattern=Pp, correls=Phip)
 
 	return(invisible(promaxOutput))
 }

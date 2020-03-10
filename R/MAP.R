@@ -1,14 +1,14 @@
 
 
-MAP <- function (data, corkind='pearson', display=TRUE) {
+MAP <- function (data, corkind='pearson', verbose=TRUE) {
 
 # Velicer's MAP test -- takes raw data or a correlation matrix
 
 nvars  <- ncol(data)
 
 # determine whether data is a correlation matrix
-if ( nrow(data) == ncol(data) ) {
-	if ( max(diag(data)) == 1 & min(diag(data)) == 1 ) {datakind = 'correlations'}} else{ datakind = 'notcorrels'}
+if (nrow(data) == ncol(data)) {
+	if (max(diag(data)) == 1 & min(diag(data)) == 1) {datakind = 'correlations'}} else{ datakind = 'notcorrels'}
 
 if (datakind == 'correlations')  rdata <- data 
 
@@ -45,7 +45,7 @@ for (m in 1:(nvars - 1)) {
 	partcov <- as.matrix(rdata - tcrossprod(a,a))  # faster than as.matrix(rdata - (a %*% t(a)))
 
 	if (max(partcov) > .0001) {
-		d <- diag (  (1 / sqrt(diag(partcov)))  )
+		d <- diag ( (1 / sqrt(diag(partcov))))
 		pr <- d %*% (partcov %*% d)  # faster than d %*% partcov %*% d
 		fmfm4[m+1,2] <- (sum(sum(pr^2))-nvars)/(nvars*(nvars-1))
 		fmfm4[m+1,3] <- (sum(sum(pr^4))-nvars)/(nvars*(nvars-1))
@@ -64,42 +64,43 @@ nfMAP4  <- which.min(na.omit(fmfm4[,3])) - 1
 dimnames(fmfm4) <-list(rep("", dim(fmfm4)[1]))
 colnames(fmfm4) <- c("root","  Avg.Corr.Sq.","  Avg.Corr.power4")
 
-evals <- cbind( 1:nvars, (diag(eigval)) )
+evals <- cbind(1:nvars, (diag(eigval)))
 dimnames(evals) <-list(rep("", dim(evals)[1]))
 colnames(evals) <- c("root"," eigenvalue")
 
-if (display == TRUE) { cat("\nVelicer's Minimum Average Partial Test \n")
+if (verbose == TRUE) { 
+	
+	cat("\nVelicer's Minimum Average Partial Test \n")
 
-if (datakind == 'correlations') cat("\n\n The entered data is a correlation matrix.") 
-
-if (datakind == 'notcorrels') {
-	cat("\nNumber of cases in the data file =       ", ncases)
-	cat("\nNumber of variables in the data file =   ", nvars)
-	# cat("\n\nSummary statistics for the data file:\n\n")
-	# print(summary(data))
-
-	# specification notices
-	if (corkind=='pearson')    {cat("\nCorrelations to be Analyzed: Pearson")}
-	if (corkind=='kendall')    {cat("\nCorrelations to be Analyzed: Kendall")}
-	if (corkind=='spearman')   {cat("\nCorrelations to be Analyzed: Spearman")}
-	if (corkind=='polychoric') {cat("\nCorrelations to be Analyzed: Polychoric")}
+	if (datakind == 'correlations') cat("\n\n The entered data is a correlation matrix.") 
+	
+	if (datakind == 'notcorrels') {
+		cat("\nNumber of cases in the data file =       ", ncases)
+		cat("\nNumber of variables in the data file =   ", nvars)
+		# cat("\n\nSummary statistics for the data file:\n\n")
+		# print(summary(data))
+	
+		# specification notices
+		if (corkind=='pearson')    {cat("\nCorrelations to be Analyzed: Pearson")}
+		if (corkind=='kendall')    {cat("\nCorrelations to be Analyzed: Kendall")}
+		if (corkind=='spearman')   {cat("\nCorrelations to be Analyzed: Spearman")}
+		if (corkind=='polychoric') {cat("\nCorrelations to be Analyzed: Polychoric")}
+	}
+	
+	cat("\n\n\nEigenvalues:\n\n")
+	print(round(evals,5))
+	
+	cat("\n\nVelicer's Average Squared Correlations\n\n")
+	print(round(fmfm4,5))
+	
+	cat("\n\nThe smallest average squared correlation is      ", round(min(na.omit(fmfm4[,2])),5))
+	cat("\n\nThe smallest average 4rth power correlation is   ", round(min(na.omit(fmfm4[,3])),5))
+	
+	cat("\n\nThe Number of Factors According to the Original (1976) MAP Test is =  ", nfMAP,  labels = NULL)
+	cat("\n\nThe Number of Factors According to the Revised  (2000) MAP Test is =  ", nfMAP4, labels = NULL, "\n\n")
 }
 
-cat("\n\n\nEigenvalues:\n\n")
-print(round(evals,5))
-
-cat("\n\nVelicer's Average Squared Correlations\n\n")
-print(round(fmfm4,5))
-
-cat("\n\nThe smallest average squared correlation is      ", round(min(na.omit(fmfm4[,2])),5))
-cat("\n\nThe smallest average 4rth power correlation is   ", round(min(na.omit(fmfm4[,3])),5))
-
-# rownames(nfMAP) <- c(" ")  
-cat("\n\nThe Number of Factors According to the Original (1976) MAP Test is =  ", nfMAP,  labels = NULL)
-cat("\n\nThe Number of Factors According to the Revised  (2000) MAP Test is =  ", nfMAP4, labels = NULL, "\n\n")
-}
-
-mapOutput <- list( eigenvalues=evals, avgsqrs=fmfm4, nfMAP=nfMAP, nfMAP4=nfMAP4 )
+mapOutput <- list(eigenvalues=evals, avgsqrs=fmfm4, nfMAP=nfMAP, nfMAP4=nfMAP4)
 
 return(invisible(mapOutput))
 

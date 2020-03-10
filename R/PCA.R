@@ -1,13 +1,14 @@
 
 # Principal Components Analysis
 
-PCA <- function (data, corkind='pearson', Nfactors=NULL, rotate='promax', ppower=3, display=TRUE) {
+PCA <- function (data, corkind='pearson', Nfactors=NULL, rotate='promax', ppower=3, verbose=TRUE) {
 
 cnoms <- colnames(data) # get colnames
 
 # determine whether data is a correlation matrix
-if ( nrow(data) == ncol(data) ) {
-	if ( all(diag(data==1)) ) {datakind = 'correlations'}} else{ datakind = 'notcorrels'}
+if (nrow(data) == ncol(data)) {
+	if (all(diag(data==1))) {datakind = 'correlations'}
+} else{ datakind = 'notcorrels'}
 
 
 if (datakind == 'correlations')  {
@@ -28,10 +29,10 @@ if (datakind == 'notcorrels') {
 }
 
 if (is.null(Nfactors)) {		
-	nfactsMAP <- MAP(cormat, display='no')
+	nfactsMAP <- MAP(cormat, verbose=FALSE)
 	Nfactors <- nfactsMAP$nfMAP
 	NfactorsWasNull <- TRUE
-}
+} else {NfactorsWasNull <- FALSE}
 
 eigval <- diag(eigen(cormat) $values)
 eigvect <- eigen(cormat) $vectors
@@ -39,37 +40,41 @@ if (Nfactors == 1) {loadings <- eigvect[,1:Nfactors] * sqrt(eigval[1:Nfactors,1:
 }else {loadings <- eigvect[,1:Nfactors] %*% sqrt(eigval[1:Nfactors,1:Nfactors])}
 loadings <- as.matrix(loadings)
 rownames(loadings) <- cnoms
-colnames(loadings) <-  c(paste("  Factor ", 1:Nfactors, sep="") )
-
+colnames(loadings) <-  c(paste("  Factor ", 1:Nfactors, sep=""))
 
 
 evalpca  <-  cbind(diag(eigval))
 rownames(evalpca) <- 1:nrow(evalpca)
 colnames(evalpca) <- "Eigenvalues"
 
-if (rotate=='none')  { pcaOutput <- list( eigenvalues=evalpca, loadingsNOROT=loadings ) }
+if (rotate=='none')  { pcaOutput <- list(eigenvalues=evalpca, loadingsNOROT=loadings) }
 
 if (rotate=='promax' | rotate=='varimax') {
 	
-	if (Nfactors==1)  pcaOutput <- list( eigenvalues=evalpca, loadingsNOROT=loadings, loadingsROT=loadings, structure=loadings, pattern=loadings )  
+	if (Nfactors==1)  pcaOutput <- list(eigenvalues=evalpca, loadingsNOROT=loadings, 
+	                                    loadingsROT=loadings, structure=loadings, pattern=loadings)  
 
 	if (Nfactors > 1) {
 		if (rotate=='varimax') { 
-			loadingsROT <- paramap::VARIMAX(loadings,display=FALSE)
-			pcaOutput <- list( eigenvalues=evalpca, loadingsNOROT=loadings, loadingsROT=loadingsROT ) 
+			loadingsROT <- paramap::VARIMAX(loadings,verbose=FALSE)
+			pcaOutput <- list(eigenvalues=evalpca, loadingsNOROT=loadings, loadingsROT=loadingsROT) 
 			}  
 		if (rotate=='promax')  { 
-			loadingsROT <- paramap::PROMAX(loadings,display=FALSE)
-			pcaOutput <- list( eigenvalues=evalpca, structure=loadingsROT$structure, pattern=loadingsROT$pattern, correls=loadingsROT$correls ) 
-			}
-}}
+			loadingsROT <- paramap::PROMAX(loadings,verbose=FALSE)
+			pcaOutput <- list(eigenvalues=evalpca, structure=loadingsROT$structure, 
+			                  pattern=loadingsROT$pattern, correls=loadingsROT$correls) 
+		}
+	}
+}
 
-if (display == TRUE) {
+if (verbose == TRUE) {
 	cat("\n\nPrincipal Components Analysis\n\n")
-	cat("\nSpecified kind of correlations for this analysis: ", ctype, "\n\n\n")
-	if (NfactorsWasNull <- TRUE) {
+	cat("\nSpecified kind of correlations for this analysis: ", ctype, "\n\n")
+	if (NfactorsWasNull == TRUE) {
 		cat('\nNfactors was not specified and so the MAP test was conducted to determine')
-		cat('\nthe number of factors to extract: Nfactors =', Nfactors,'\n\n')		
+		cat('\nthe number of factors to extract: Nfactors =', Nfactors,'\n\n\n')		
+	} else if (NfactorsWasNull == FALSE) {
+		cat('\nThe specified number of factors to extract =', Nfactors,'\n\n\n')
 	}
 	print(round(evalpca,2))
 	cat("\n\nUnrotated PCA Loadings:\n\n")
@@ -82,7 +87,9 @@ if (display == TRUE) {
 				cat("\n\nPromax Rotation Structure Matrix:\n\n");    print(round(loadingsROT$structure,2));cat("\n")
 				cat("\n\nPromax Rotation Pattern Matrix:\n\n");      print(round(loadingsROT$pattern,2));cat("\n")
 				cat("\n\nPromax Rotation Factor Correlations:\n\n"); print(round(loadingsROT$correls,2));cat("\n\n")
-}}}
+			}
+		}
+}
 
 return(invisible(pcaOutput))
 

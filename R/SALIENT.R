@@ -1,6 +1,6 @@
 
 
-# The salient loadings criterion for determing the number of factors.
+# The salient loadings criterion for determing the number of factors
 
 # Gorsuch, R. L. (1997a). Exploratory factor analysis: Its role in item analysis. 
 #      Journal of Personality Assessment, 68, 532-560.
@@ -10,11 +10,12 @@
 # salvalue = The loading value that is considered salient.
 
 
-SALIENT <- function (data, salvalue=.4, numsals=3, corkind='pearson', display=FALSE) {
+SALIENT <- function (data, salvalue=.4, numsals=3, corkind='pearson', verbose=FALSE) {
 
 # determine whether data is a correlation matrix
 if (nrow(data) == ncol(data)) {
-	if (max(diag(data)) == 1 & min(diag(data)) == 1) {datakind = 'correlations'}} else{ datakind = 'notcorrels'}
+	if (max(diag(data)) == 1 & min(diag(data)) == 1) {datakind = 'correlations'}
+} else{ datakind = 'notcorrels'}
 
 if (datakind == 'correlations')  rdata <- data 
 
@@ -32,11 +33,11 @@ if (datakind == 'notcorrels') {
 
 Nfactors <- cbind(NEVALSGT1(rdata)) # Number of eigenvalues > 1
 
-paf.out <- PA_FA(rdata, Nfactors=Nfactors, display="no")
+paf.out <- PA_FA(rdata, Nfactors=Nfactors, verbose=FALSE)
 
 loadings <- paf.out$structure
 
-if (Nfactors > 1) loadings <- VARIMAX(loadings, display=FALSE)
+if (Nfactors > 1) loadings <- VARIMAX(loadings, verbose=FALSE)
 
 rowmax <- cbind(apply(abs(loadings), 1, max))
 
@@ -52,7 +53,7 @@ for (lupec in 1:ncol(loadings)) {
 	if (nsalients >= numsals)  nfSAL <- nfSAL + 1 
 }
 
-if (display == TRUE) {
+if (verbose == TRUE) {
 	cat('\n\n\nThe salient loadings criterion for determining the number of components:')
 	cat("\n\nThe salient loading value = ", salvalue)
 	cat("\n\nThe required number salient loadings = ", numsals)

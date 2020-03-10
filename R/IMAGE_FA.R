@@ -1,13 +1,13 @@
 
 # Image Factor Extraction (Gorsuch 1983, p 113; Velicer 1974, EPM, 34, 564)
 
-IMAGE_FA <- function (data, corkind='pearson', Nfactors=NULL, rotate='promax', ppower=3, display=TRUE ) {
+IMAGE_FA <- function (data, corkind='pearson', Nfactors=NULL, rotate='promax', ppower=3, verbose=TRUE) {
 
 cnoms <- colnames(data) # get colnames
 
 # determine whether data is a correlation matrix
-if ( nrow(data) == ncol(data) ) {
-	if ( all(diag(data==1)) ) {datakind = 'correlations'}} else{ datakind = 'notcorrels'}
+if (nrow(data) == ncol(data)) {
+	if (all(diag(data==1))) {datakind = 'correlations'}} else{ datakind = 'notcorrels'}
 
 if (datakind == 'correlations')  {
 	cormat <- data 
@@ -27,12 +27,12 @@ if (datakind == 'notcorrels') {
 }
 
 if (is.null(Nfactors)) {		
-	nfactsMAP <- MAP(cormat, display='no')
+	nfactsMAP <- MAP(cormat, verbose=FALSE)
 	Nfactors <- nfactsMAP$nfMAP
 	NfactorsWasNull <- TRUE
-}
+} else {NfactorsWasNull <- FALSE}
 
-d <-  diag( 1 / diag(solve(cormat)) )
+d <-  diag(1 / diag(solve(cormat)))
 gvv <- cormat + d %*% solve(cormat) %*% d - 2 * d
 # factor pattern for image analysis Velicer 1974 p 565 formula (2)
 s <- sqrt(d)                     #  Velicer 1974 p 565 formula (7)
@@ -48,33 +48,35 @@ colnames(evalimag) <- "Eigenvalues"
 
 loadings <- as.matrix(s %*% l %*% dd)      #  Velicer 1974 p 565 formula (2)
 rownames(loadings) <- cnoms
-colnames(loadings) <-  c(paste("  Factor ", 1:Nfactors, sep="") )
+colnames(loadings) <-  c(paste("  Factor ", 1:Nfactors, sep=""))
 
-if (rotate=='none')   { imagefaOutput <- list( eigenvalues=evalimag, loadingsNOROT=loadings ) }
+if (rotate=='none')   { imagefaOutput <- list(eigenvalues=evalimag, loadingsNOROT=loadings) }
 
 if (rotate=='promax' | rotate=='varimax') {
 
 	if (Nfactors==1) {
-		imagefaOutput <- list( eigenvalues=evalimag, loadingsNOROT=loadings, loadingsROT=loadings, structure=loadings, pattern=loadings) 
+		imagefaOutput <- list(eigenvalues=evalimag, loadingsNOROT=loadings, loadingsROT=loadings, structure=loadings, pattern=loadings) 
 		} 
 
 	if (Nfactors > 1) {
 		if (rotate=='varimax') { 
-			loadingsROT <- paramap::VARIMAX(loadings,display=FALSE)
-			imagefaOutput <- list( eigenvalues=evalimag, loadingsNOROT=loadings, loadingsROT=loadingsROT ) 
+			loadingsROT <- paramap::VARIMAX(loadings,verbose=FALSE)
+			imagefaOutput <- list(eigenvalues=evalimag, loadingsNOROT=loadings, loadingsROT=loadingsROT) 
 			} 
 	if (rotate=='promax')  { 
-			loadingsROT <- paramap::PROMAX(loadings,display=FALSE)
-			imagefaOutput <- list( eigenvalues=evalimag, structure=loadingsROT$structure, pattern=loadingsROT$pattern, correls=loadingsROT$correls ) 
+			loadingsROT <- paramap::PROMAX(loadings,verbose=FALSE)
+			imagefaOutput <- list(eigenvalues=evalimag, structure=loadingsROT$structure, pattern=loadingsROT$pattern, correls=loadingsROT$correls) 
 			}
 }}
 
-if (display == TRUE) {
+if (verbose == TRUE) {
 	cat("\n\nImage Factor Analysis:\n\n")
 	cat("\nSpecified kind of correlations for this analysis: ", ctype, "\n\n\n")
-	if (NfactorsWasNull <- TRUE) {
+	if (NfactorsWasNull == TRUE) {
 		cat('\nNfactors was not specified and so the MAP test was conducted to determine')
-		cat('\nthe number of factors to extract: Nfactors =', Nfactors,'\n\n')		
+		cat('\nthe number of factors to extract: Nfactors =', Nfactors,'\n\n\n')		
+	} else if (NfactorsWasNull == FALSE) {
+		cat('\nThe specified number of factors to extract =', Nfactors,'\n\n\n')
 	}
 	print(round(evalimag,2))
 	cat("\n\nUnrotated image Loadings:\n\n")

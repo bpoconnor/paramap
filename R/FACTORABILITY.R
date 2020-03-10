@@ -1,13 +1,13 @@
 
 # three methods of assessing the factorability of a correlation matrix or raw data set
 
-FACTORABILITY <- function (data, corkind='pearson', Ncases=NULL, display=TRUE) {
+FACTORABILITY <- function (data, corkind='pearson', Ncases=NULL, verbose=TRUE) {
 
 cnoms <- colnames(data) # get colnames
 
 # determine whether data is a correlation matrix
-if ( nrow(data) == ncol(data) ) {
-	if ( all(diag(data==1)) ) {datakind = 'correlations'}} else{ datakind = 'notcorrels'}
+if (nrow(data) == ncol(data)) {
+	if (all(diag(data==1))) {datakind = 'correlations'}} else{ datakind = 'notcorrels'}
 
 if (datakind == 'correlations') {
 	cormat <- data 
@@ -86,47 +86,47 @@ rownames(KMOvars) <- cnoms
 colnames(KMOvars) <- '  Variable MSA'
 
 
-if (display) {
-cat('\n\nThree methods of assessing the factorability of a correlation matrix or raw data set:')
-
-cat('\n\n\nThe determinant of the correlation matrix should be > 0.00001 for factorability.')
-if (detcor > 0.00001) cat('\n\nThe determinant is',round(detcor,7),'which is > 0.00001, indicating factorability.')
-if (detcor <= 0.00001) cat('\n\nThe determinant is',round(detcor,7),'which is NOT > 0.00001, indicating NON factorability.')
-
-cat("\n\n\nBartlett's test of whether a correlation matrix is significantly different")
-cat('\nfrom an identity matrix (wherein all of the off-diagonal elements are zero):')
-cat('\n\nchisq =',chi2,'    df=',df,'     p =',pvalue)
-cat('\n\nA significant difference is required for factorability.')
-
-cat('\n\n\n\nThe Kaiser-Meyer-Olkin measure of sampling adequacy (MSA):')
-
-cat('\n\nOverall measure of sampling adequacy (MSA) =',round(KMO,2),'\n\n')
-
-print(round(KMOvars,2))
-
-cat("\n\nKaiser & Rice's (1974) interpretation guidelines for MSA values:")
-cat('\n
-   KMO >= .9 is marvelous
-   KMO in the .80s is mertitorious
-   KMO in the .70s is middling
-   KMO in the .60s is medicore
-   KMO in the .50s is miserable
-   KMO < .5 is unacceptable')
-cat('\n\nConsider excluding items with KMO values < .5 and then re-run the FACTORABILITY analyses.\n')
-
-cat('\n\nThe overall KMO coefficient indicates the proportion of')
-cat('\nvariance in the variables that might be caused by underlying')
-cat('\nNfactors. If the variables share common factors, then the')
-cat('\noverall KMO coefficient should be close to 1.0. The overall')
-cat('\nKMO indicates the extent to which there is at least one')
-cat('\nlatent factor underlying the variables. The overall KMO')
-cat('\nindex is considered particularly meaningful when the cases')
-cat('\nto variables ratio is less than 1:5. The KMO coefficient for')
-cat('\na variable is a kind of summary index of how much a')
-cat('\nvariable overlaps with the other variables.\n\n\n')
+if (verbose==TRUE) {
+	cat('\n\nThree methods of assessing the factorability of a correlation matrix or raw data set:')
+	
+	cat('\n\n\nThe determinant of the correlation matrix should be > 0.00001 for factorability.')
+	if (detcor > 0.00001) cat('\n\nThe determinant is',round(detcor,7),'which is > 0.00001, indicating factorability.')
+	if (detcor <= 0.00001) cat('\n\nThe determinant is',round(detcor,7),'which is NOT > 0.00001, indicating NON factorability.')
+	
+	cat("\n\n\nBartlett's test of whether a correlation matrix is significantly different")
+	cat('\nfrom an identity matrix (wherein all of the off-diagonal elements are zero):')
+	cat('\n\nchisq =',chi2,'    df=',df,'     p =',pvalue)
+	cat('\n\nA significant difference is required for factorability.')
+	
+	cat('\n\n\n\nThe Kaiser-Meyer-Olkin measure of sampling adequacy (MSA):')
+	
+	cat('\n\nOverall measure of sampling adequacy (MSA) =',round(KMO,2),'\n\n')
+	
+	print(round(KMOvars,2))
+	
+	cat("\n\nKaiser & Rice's (1974) interpretation guidelines for MSA values:")
+	cat('\n
+	   KMO >= .9 is marvelous
+	   KMO in the .80s is mertitorious
+	   KMO in the .70s is middling
+	   KMO in the .60s is medicore
+	   KMO in the .50s is miserable
+	   KMO < .5 is unacceptable')
+	cat('\n\nConsider excluding items with KMO values < .5 and then re-run the FACTORABILITY analyses.\n')
+	
+	cat('\n\nThe overall KMO coefficient indicates the proportion of')
+	cat('\nvariance in the variables that might be caused by underlying')
+	cat('\nfactors. If the variables share common factors, then the')
+	cat('\noverall KMO coefficient should be close to 1.0. The overall')
+	cat('\nKMO indicates the extent to which there is at least one')
+	cat('\nlatent factor underlying the variables. The overall KMO')
+	cat('\nindex is considered particularly meaningful when the cases')
+	cat('\nto variables ratio is less than 1:5. The KMO coefficient for')
+	cat('\na variable is a kind of summary index of how much a')
+	cat('\nvariable overlaps with the other variables.\n\n\n')
 }
 
-factOutput <- list( chisq=chi2, df=df, pvalue=pvalue, Rimage=Rpart, KMO=KMO, KMOvars=KMOvars )
+factOutput <- list(chisq=chi2, df=df, pvalue=pvalue, Rimage=Rpart, KMO=KMO, KMOvars=KMOvars)
 
 return(invisible(factOutput))
 

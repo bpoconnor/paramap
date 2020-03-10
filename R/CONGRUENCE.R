@@ -1,11 +1,11 @@
 
 
-CONGRUENCE <- function (target, loadings, display=TRUE) {
+CONGRUENCE <- function (target, loadings, verbose=TRUE) {
 
 # aligning matrices by factor & computing factor congruence
 
 # factor solution congruence before alignment
-rcBefore <- sum(target*loadings) / sqrt ( sum(target*target) * sum(loadings*loadings) )
+rcBefore <- sum(target*loadings) / sqrt (sum(target*target) * sum(loadings*loadings))
 
 nrows <- nrow(target)
 ncols <- ncol(target)
@@ -20,7 +20,7 @@ mmm <- matrix(-9999,nrows,ncols)
 
 # matrix of position permutations
 # zzz <- as.matrix(permn(1:ncols))
-# fin <- t(array(unlist(zzz), dim <- c(ncols, nrow(zzz)) ) )
+# fin <- t(array(unlist(zzz), dim <- c(ncols, nrow(zzz))))
 
 
 # # # http://stackoverflow.com/questions/11095992/generating-all-distinct-permutations-of-a-list-in-r
@@ -29,7 +29,7 @@ mmm <- matrix(-9999,nrows,ncols)
 # xx = eg[apply(eg, 1, anyDuplicated) == 0, ]
 
 # # A check that every element occurs the same number of times in each position
-# apply(t(array(unlist( xx), dim = c(5, nrow(xx)) ) ), 2, tabulate, nbins = 5)
+# apply(t(array(unlist(xx), dim = c(5, nrow(xx)))), 2, tabulate, nbins = 5)
 
 
 # # http://stackoverflow.com/questions/11095992/generating-all-distinct-permutations-of-a-list-in-r
@@ -37,18 +37,15 @@ mmm <- matrix(-9999,nrows,ncols)
 # eg = expand.grid(a,a,a)
 # xx = eg[apply(eg, 1, anyDuplicated) == 0, ]
 
-# # A check that every element occurs the same number of times in each position
-# apply(t(array(unlist( xx), dim = c(3, nrow(xx)) ) ), 2, tabulate, nbins = 3)
-
-# ncols = 5
 
 # http://stackoverflow.com/questions/11095992/generating-all-distinct-permutations-of-a-list-in-r
 a = seq(1:ncols)
-eg = eval(parse(text=( paste( "expand.grid(", paste(replicate(ncols, "a"), collapse = ",") ,")" )  )))
+eg = eval(parse(text=(paste("expand.grid(", 
+          paste(replicate(ncols, "a"), collapse = ",") ,")"))))
 fin = eg[apply(eg, 1, anyDuplicated) == 0, ]
 
 # A check that every element occurs the same number of times in each position
-#apply(t(array(unlist(fin), dim = c(ncols, nrow(fin)) ) ), 2, tabulate, nbins = ncols)
+#apply(t(array(unlist(fin), dim = c(ncols, nrow(fin)))), 2, tabulate, nbins = ncols)
 
 
 # matrix of possible factor signs
@@ -57,8 +54,8 @@ for (jj in 1:ncols) { nos[1,jj] <- 2^jj }
 seqsize <- (2^(ncols)) / nos
 signs <- matrix(-9999, (2^(ncols)), ncols)
 for (jj in 1:ncols) { 
-	grp <- rbind( matrix(1,seqsize[1,jj],1), matrix(-1,seqsize[1,jj],1) )
-	signs[,jj] <- as.matrix( rep(grp, (nos[1,jj]/2) ), (2^(ncols)) , 1 )
+	grp <- rbind(matrix(1,seqsize[1,jj],1), matrix(-1,seqsize[1,jj],1))
+	signs[,jj] <- as.matrix(rep(grp, (nos[1,jj]/2)), (2^(ncols)) , 1)
 }
 # only half the matrix of signs is needed
 signs <- signs[1:(nrow(signs)/2),]
@@ -68,11 +65,16 @@ rc <- 0
 for (ii in 1:nrow(fin)) {
 	for (iisigns in 1:nrow(signs)) {
 		for (jj in 1:ncols) { mmm[,jj] <- loadings[,fin[ii,jj]] * signs[iisigns,jj] }
-		rcnew <- sum(target*mmm) / sqrt ( sum(target*target) * sum(mmm*mmm) )
-	if ( abs(rcnew) > abs(rc) ) { rc <- rcnew; ans <- rbind(fin[ii,]);  signsnew <- rbind(signs[iisigns,]) }
-}}
+		rcnew <- sum(target*mmm) / sqrt (sum(target*target) * sum(mmm*mmm))
+		if (abs(rcnew) > abs(rc)) { 
+			rc <- rcnew
+			ans <- rbind(fin[ii,])
+			signsnew <- rbind(signs[iisigns,]) 
+		}
+	}
+}
 
-if ( rc < 0 ) signsnew <- signsnew * -1 
+if (rc < 0) signsnew <- signsnew * -1 
 
 # rearranging the loading matrix
 loadingsAfter <- matrix(-9999,nrows,ncols)
@@ -88,10 +90,10 @@ if (ncol(loadings) == 1 & rcBefore < 0) loadingsAfter <- loadings * -1
 
 
 # factor congruences after alignment
-rcFactors <- colSums(target*loadingsAfter) / sqrt ( colSums(target*target) * colSums(loadingsAfter*loadingsAfter) )
+rcFactors <- colSums(target*loadingsAfter) / sqrt (colSums(target*target) * colSums(loadingsAfter*loadingsAfter))
 
 # factor solution congruence after alignment
-rcAfter <- sum(target*loadingsAfter) / sqrt ( sum(target*target) * sum(loadingsAfter*loadingsAfter) )
+rcAfter <- sum(target*loadingsAfter) / sqrt (sum(target*target) * sum(loadingsAfter*loadingsAfter))
 
 # % var in target & in resid matrix
 resid <- abs(target - loadingsAfter)
@@ -99,12 +101,10 @@ pertarget <- sum(target*target) / nrows
 perresid  <- sum(resid*resid) / nrows 
 
 # root mean square residual
-rmsr <- sqrt ( sum(resid*resid) / ( nrows * ncols ))
-
-#print(rmsr)
+rmsr <- sqrt (sum(resid*resid) / (nrows * ncols))
 
 
-if (display == TRUE) {
+if (verbose == TRUE) {
 	cat("\n\nFactor solution congruences before & after factor alignment:")
 	cat("\n\nFactor soution congruence before alignment  = ", round(rcBefore,2))
 	cat("\n\nFactor soution congruence after alignment   = ", round(rcAfter,2))
@@ -114,7 +114,8 @@ if (display == TRUE) {
 	cat("\n\nRoot mean square residual                   = ", round(rmsr,2), "\n\n\n\n")
 }
 
-congruenceOutput <- list( rcBefore=rcBefore, rcAfter=rcAfter, rcFactors=rcFactors, rmsr=rmsr, residmat=resid, loadingsNew=loadingsAfter  )
+congruenceOutput <- list(rcBefore=rcBefore, rcAfter=rcAfter, rcFactors=rcFactors, rmsr=rmsr, 
+	residmat=resid, loadingsNew=loadingsAfter)
 
 return(invisible(congruenceOutput))
 

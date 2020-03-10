@@ -2,13 +2,14 @@
 
 # Maximum likelihood factor analysis algorithm -- Marcus, 1993
 
-MAXLIKE_FA <- function (data, corkind='pearson', Nfactors=NULL, tolerml=.001, iterml=100, rotate='promax', ppower=3, display=TRUE ) {
+MAXLIKE_FA <- function (data, corkind='pearson', Nfactors=NULL, tolerml=.001, 
+                        iterml=100, rotate='promax', ppower=3, verbose=TRUE) {
 
 cnoms <- colnames(data) # get colnames
 
 # determine whether data is a correlation matrix
-if ( nrow(data) == ncol(data) ) {
-	if ( all(diag(data==1)) ) {datakind = 'correlations'}} else{ datakind = 'notcorrels'}
+if (nrow(data) == ncol(data)) {
+	if (all(diag(data==1))) {datakind = 'correlations'}} else{ datakind = 'notcorrels'}
 
 if (datakind == 'correlations')  {
 	cormat <- data 
@@ -28,10 +29,10 @@ if (datakind == 'notcorrels') {
 }
 
 if (is.null(Nfactors)) {		
-	nfactsMAP <- MAP(cormat, display='no')
+	nfactsMAP <- MAP(cormat, verbose=FALSE)
 	Nfactors <- nfactsMAP$nfMAP
 	NfactorsWasNull <- TRUE
-}
+} else {NfactorsWasNull <- FALSE}
 
 Rho <- cormat
 k <- Nfactors
@@ -76,35 +77,39 @@ Resid <- Rho - A1%*%t(A1)
 
 loadings <- as.matrix(A1)
 rownames(loadings) <- cnoms
-colnames(loadings) <-  c(paste("  Factor ", 1:Nfactors, sep="") )
+colnames(loadings) <-  c(paste("  Factor ", 1:Nfactors, sep=""))
 
 evalmax <- as.matrix(diag(L))
 rownames(evalmax) <- 1:nrow(evalmax)
 colnames(evalmax) <- "Eigenvalues"
 
-if (rotate=='none')  { maxlikeOutput <- list( eigenvalues=evalmax, loadingsNOROT=loadings ) }
+if (rotate=='none')  { maxlikeOutput <- list(eigenvalues=evalmax, loadingsNOROT=loadings) }
 
 if (rotate=='promax' | rotate=='varimax') {
 
-	if (Nfactors==1) { maxlikeOutput <- list( eigenvalues=evalmax, loadingsNOROT=loadings, loadingsROT=loadings, structure=loadings, pattern=loadings ) } 
+	if (Nfactors==1) { maxlikeOutput <- list(eigenvalues=evalmax, loadingsNOROT=loadings, 
+		               loadingsROT=loadings, structure=loadings, pattern=loadings) } 
 
 	if (Nfactors > 1) {
 		if (rotate=='varimax') { 
-			loadingsROT <- paramap::VARIMAX(loadings,display=FALSE)
-			maxlikeOutput <- list( eigenvalues=evalmax, loadingsNOROT=loadings, loadingsROT=loadingsROT ) 
+			loadingsROT <- paramap::VARIMAX(loadings,verbose=FALSE)
+			maxlikeOutput <- list(eigenvalues=evalmax, loadingsNOROT=loadings, loadingsROT=loadingsROT) 
 			} 
 		if (rotate=='promax')  { 
-			loadingsROT <- paramap::PROMAX(loadings,display=FALSE)
-			maxlikeOutput <- list( eigenvalues=evalmax, structure=loadingsROT$structure, pattern=loadingsROT$pattern, correls=loadingsROT$correls ) 
+			loadingsROT <- paramap::PROMAX(loadings,verbose=FALSE)
+			maxlikeOutput <- list(eigenvalues=evalmax, structure=loadingsROT$structure, 
+			                      pattern=loadingsROT$pattern, correls=loadingsROT$correls) 
 			}
 }}
 
-if (display == TRUE) {
+if (verbose == TRUE) {
 	cat("\n\nMaximum likelihood factor analysis:\n\n")
 	cat("\nSpecified kind of correlations for this analysis: ", ctype, "\n")
-	if (NfactorsWasNull <- TRUE) {
+	if (NfactorsWasNull == TRUE) {
 		cat('\nNfactors was not specified and so the MAP test was conducted to determine')
-		cat('\nthe number of factors to extract: Nfactors =', Nfactors,'\n\n')		
+		cat('\nthe number of factors to extract: Nfactors =', Nfactors,'\n\n\n')		
+	} else if (NfactorsWasNull == FALSE) {
+		cat('\nThe specified number of factors to extract =', Nfactors,'\n\n\n')
 	}
 	cat("\n\nNumber of iterations = ", i, "\n\n")	
 	print(round(evalmax,2));cat("\n\n")

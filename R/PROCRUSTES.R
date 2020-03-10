@@ -1,8 +1,7 @@
-
 		
 # Procrustes rotation of factor loading matries
 
-PROCRUSTES <- function (loadings, target, type='orthogonal', display=TRUE) {
+PROCRUSTES <- function (loadings, target, type='orthogonal', verbose=TRUE) {
 
 #   type = 'orthogonal' or 'oblique'
 
@@ -18,7 +17,7 @@ if  (type == 'orthogonal') {
 	v <- eigen(v1) $vectors
 	ev <- diag(eigen(v1) $values)
 	o = t(w) %*% s %*% v
-	k = diag(   ( (diag(o)) / abs(diag(o)) ) , nrow = nrow(o), ncol =nrow(o))
+	k = diag(  ((diag(o)) / abs(diag(o))) , nrow = nrow(o), ncol =nrow(o))
 	ww = w %*% k
 	t1 = ww %*% t(v)
 	procrust = loadings %*% t1 
@@ -27,30 +26,30 @@ if  (type == 'orthogonal') {
 # oblique Procrustes   
 # Hurley & Cattell 1962, Behavioral Science, 7, 258
 	if (type == 'oblique') {
-	cat1 = (solve( t(loadings) %*% loadings )) %*% t(loadings) %*% target
-	cat2 = sqrt ( colSums(cat1 * cat1 ) )
+	cat1 = (solve(t(loadings) %*% loadings)) %*% t(loadings) %*% target
+	cat2 = sqrt (colSums(cat1 * cat1))
 	numrows = nrow(cat1) - 1
 	cat3 = cat2
-	for (t in 1:numrows) { cat3 = rbind( cat3, cat2 ) }
+	for (t in 1:numrows) { cat3 = rbind(cat3, cat2) }
 	procrust =  loadings %*% (cat1 / cat3)   
 }
 
 colnames(procrust) <- colnames(loadings)
 
 # congruence coefficient
-rtproc = sum(target*procrust) / sqrt ( sum(target*target)  * sum(procrust*procrust) )
+rtproc = sum(target*procrust) / sqrt (sum(target*target)  * sum(procrust*procrust))
 
-#  % var in target  vs % var in resid matrix.
+#  % var in target vs % var in resid matrix.
 resid = target - procrust
 nvars = nrow(target)
 pertarget =  sum(target*target) / nvars
-perresid =  sum( (target - procrust) * (target - procrust) ) / nvars 
+perresid =  sum((target - procrust) * (target - procrust)) / nvars 
 
 #root mean square residual.
-rmsr = sqrt ( sum(resid*resid) / ( nvars * ncol(target) ))
+rmsr = sqrt (sum(resid*resid) / (nvars * ncol(target)))
 
 
-if (display == TRUE) {
+if (verbose == TRUE) {
 	if (type=='orthogonal') {cat("\n\n\nOrthogonal Procrustes Rotation:") }
 	if (type=='oblique')    {cat("\n\n\nOblique Procrustes Rotation:") }
 	cat("\n\nOriginal Loadings:\n\n"); print(round(loadings,3))

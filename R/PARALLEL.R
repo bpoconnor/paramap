@@ -1,8 +1,8 @@
 
-# parallel analysis eigenvalues (no real data required)
+# parallel analysis of eigenvalues (no real data required)
 
-PARALLEL <- function ( Nvars=50, Ncases=300, Ndatasets=100, extract='PCA', percentile=95,
-                       corkind='pearson', display=TRUE){
+PARALLEL <- function (Nvars=50, Ncases=300, Ndatasets=100, extract='PCA', percentile=95,
+                       corkind='pearson', verbose=TRUE){
 
 evals <- matrix(0, nrow = Nvars, ncol = Ndatasets)
 # pb <- utils::txtProgressBar(min = 0, max = Ndatasets, style = 3) 
@@ -30,7 +30,7 @@ for (nds in 1:Ndatasets) {
 	}
 
 	if (extract=='image') {
-		d <-  diag( 1 / diag(solve(Rrand)) )
+		d <-  diag(1 / diag(solve(Rrand)))
 		gvv <- Rrand + d %*% solve(Rrand) %*% d - 2 * d
 		s <- sqrt(d)                  #  Velicer 1974 p 565 formula (7)
 		r2 <- solve(s) %*%  gvv  %*% solve(s)  # Velicer 1974 p 565 formula (5)
@@ -50,7 +50,7 @@ results <- cbind(1:Nvars,means,percentiles)
 rownames(results) <- 1:Nvars
 colnames(results) <- c("    Root", "    Mean", "  Percentile")
 
-if (display == TRUE) {
+if (verbose == TRUE) {
 	cat("\n\n\nPARALLEL ANALYSIS\n")
 
 	# specification notices
@@ -71,7 +71,7 @@ if (display == TRUE) {
 	print(round(results,3))
 }
 
-parOutput <- list( eigenvalues=results  )
+parOutput <- list(eigenvalues=results)
 
 return(invisible(parOutput))
 

@@ -1,15 +1,15 @@
 
 
 RAWPAR <- function (data, randtype='generated', extract='PCA', Ndatasets=100, percentile=95,
-                      corkind='pearson', corkindRAND='pearson', Ncases, display=TRUE){
+                    corkind='pearson', corkindRAND='pearson', Ncases, verbose=TRUE){
 
 # takes raw data or a correlation matrix
 
 nvars <- ncol(data) 
 
 # determine whether data is a correlation matrix
-if ( nrow(data) == ncol(data) ) {
-	if ( all(diag(data==1)) ) {datakind = 'correlations'}} else{ datakind = 'notcorrels'}
+if (nrow(data) == ncol(data)) {
+	if (all(diag(data==1))) {datakind = 'correlations'}} else{ datakind = 'notcorrels'}
 
 	if (anyNA(data) == TRUE) {
 		data <- na.omit(data)
@@ -17,11 +17,12 @@ if ( nrow(data) == ncol(data) ) {
 	}
 
 # determine whether the data are whole numbers
-if ( all((data-round(data)) == 0) == TRUE) { wholenums=1 } else { wholenums=0 }
+if (all((data-round(data)) == 0) == TRUE) { wholenums=1 
+} else { wholenums=0 }
 
 
 # real data correlation matrix
-if (datakind == 'correlations') { Rreal <- data }
+if (datakind == 'correlations') Rreal <- data
 if (datakind == 'notcorrels')   { 
 	Ncases <- nrow(data) 	
 	if (corkind=='pearson')         { Rreal <- cor(data, method="pearson") }
@@ -43,7 +44,7 @@ if (extract=='PAF') {
 }
 
 if (extract=='image') { # Gorsuch 1983, p 113; Velicer 1974, EPM, 34, 564
-	d <-  diag( 1 / diag(solve(Rreal)) )
+	d <-  diag(1 / diag(solve(Rreal)))
 	gvv <- Rreal + d %*% solve(Rreal) %*% d - 2 * d
 	s <- sqrt(d)                  #  Velicer 1974 p 565 formula (7)
 	r2 <- solve(s) %*%  gvv  %*% solve(s)  # Velicer 1974 p 565 formula (5)
@@ -85,7 +86,7 @@ for (nds in 1:Ndatasets) {
 		evals[,nds] <- eigen(Rrand) $values }
 
 	if (extract=='image') {
-		d <-  diag( 1 / diag(solve(Rrand)) )
+		d <-  diag(1 / diag(solve(Rrand)))
 		gvv <- Rrand + d %*% solve(Rrand) %*% d - 2 * d
 		s <- sqrt(d)                  #  Velicer 1974 p 565 formula (7)
 		r2 <- solve(s) %*%  gvv  %*% solve(s)  # Velicer 1974 p 565 formula (5)
@@ -109,7 +110,7 @@ results <- cbind(realevals,1:nvars,means,percentiles)
 rownames(results) <- 1:nvars
 colnames(results) <- c("Real Data","    Root", "    Mean", "  Percentile")
 
-if (display == TRUE) {
+if (verbose == TRUE) {
 	
 	cat("\n\n\nPARALLEL ANALYSIS\n")
 
@@ -161,7 +162,7 @@ if (display == TRUE) {
 
 }
 
-rawparOutput <- list( eigenvalues=results, nfPA=nfPA  )
+rawparOutput <- list(eigenvalues=results, nfPA=nfPA)
 
 return(invisible(rawparOutput))
 

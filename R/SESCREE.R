@@ -7,11 +7,12 @@
 # Educational and Psychological Measurement, 56(3), 443-451.
 
 
-SESCREE <- function (data, corkind='pearson', display=FALSE) {
+SESCREE <- function (data, corkind='pearson', verbose=FALSE) {
 
 # determine whether data is a correlation matrix
 if (nrow(data) == ncol(data)) {
-	if (max(diag(data)) == 1 & min(diag(data)) == 1) {datakind = 'correlations'}} else{ datakind = 'notcorrels'}
+	if (max(diag(data)) == 1 & min(diag(data)) == 1) {datakind = 'correlations'}
+} else{ datakind = 'notcorrels'}
 
 if (datakind == 'correlations')  rdata <- data 
 
@@ -48,7 +49,7 @@ for (loop in 1:(neigvals-2)) {
 	if (sderest > arbiter) {nfSCREE <- nfSCREE + 1}
 }
 
-if (display == TRUE) {
+if (verbose == TRUE) {
 	cat('\n\n\nStandard Error Scree test for number of factors:')
 	cat("\n\nThe SE Estimate must be > the following value")
 	cat("\nfor a component to be nontrivial: ", arbiter, "\n\n")

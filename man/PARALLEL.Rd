@@ -1,7 +1,7 @@
 \name{PARALLEL}
 \alias{PARALLEL}
-\title{parallel analysis of eigenvalues (random data only)}
-\description{This function generates eigenvalues for random data sets with specified 
+\title{Parallel analysis of eigenvalues (random data only)}
+\description{Generates eigenvalues for random data sets with specified 
 	numbers of variables and cases. Typically, the eigenvalues derived from an actual 
 	data set are compared to the eigenvalues derived from the random data.  In Horn's 
 	original description of this procedure, the mean eigenvalues from the random data 
@@ -15,7 +15,7 @@
 }
 \usage{
 PARALLEL(Nvars, Ncases, Ndatasets=100, extract='PCA', percentile='95',
-         corkind='pearson', display=TRUE)
+         corkind='pearson', verbose=TRUE)
 }
 \arguments{
   \item{Nvars}{
@@ -40,42 +40,41 @@ PARALLEL(Nvars, Ncases, Ndatasets=100, extract='PCA', percentile='95',
   \item{corkind}{
   \code{}The kind of correlation matrix to be used for the random data. The options are 'pearson', 'kendall',
          and 'spearman'.}
-
-  \item{display}{
-  \code{}Display the results? The options are TRUE or FALSE.}
+                  
+  \item{verbose}{
+  \code{}Should detailed results be displayed in console? \cr The options are: TRUE (default) or FALSE.}
 }
 \details{
-Although the PARALLEL function permits users to specify PCA or PAF or image as the 
-factor extraction method, users should be aware of an unresolved issue in the literature. 
-Principal components eigenvalues are often used to determine the number of common factors. 
-This is the default in most statistical software packages, and it is the primary practice 
-in the literature. It is also the method used by many factor analysis experts, including 
+The PARALLEL function permits users to specify PCA or PAF or image as the 
+factor extraction method. Principal components eigenvalues are often used to determine the number  
+of common factors. This is the default in most statistical software packages, and it is the  
+primary practice in the literature. It is also the method used by many factor analysis experts, including 
 Cattell, who often examined principal components eigenvalues in his scree plots to determine 
-the number of common factors. But others believe that this common practice is wrong. 
-Principal components eigenvalues are based on all of the variance in correlation matrices, 
-including both the variance that is shared among variables and the variances that are unique 
-to the variables. In contrast, principal axis eigenvalues are based solely on the shared 
-variance among the variables. The procedures are qualitatively different. Some therefore 
-claim that the eigenvalues from one extraction method should not be used to determine the 
-number of factors for another extraction method. The issue remains neglected and unsettled. 
-The PAF option in the extract argument for this function was included for research purposes. 
-It is otherwise probably best to use PCA as the extraction method for regular data analyses. 
-The MAP test (also in this package) is probably more suitable for determining the number of common factors.
+the number of common factors. Principal components eigenvalues are based on all of the variance  
+in correlation matrices, including both the variance that is shared among variables and the  
+variances that are unique to the variables. In contrast, principal axis eigenvalues are based  
+solely on the shared variance among the variables. The procedures are qualitatively different.
+Some therefore claim that the eigenvalues from one extraction method should not be used to determine the 
+number of factors for another extraction method. The PAF option in the extract argument for the
+PARALLEL function was included solely for research purposes. It is best to use PCA as the extraction 
+method for regular data analyses. The MAP test (also in this package) is generally more suitable for 
+determining the number of common factors.
 }
 \value{The random data eigenvalues}
 \references{
- {Horn, J. L. (1965). A rationale and test for the number of factors in factor analysis. \emph{Psychometrika, 30,} 179-185.}
-\cr\cr {Zwick, W. R., & Velicer, W. F. (1986). Comparison of five rules for determining the number of 
-	components to retain. \emph{Psychological Bulletin, 99,} 432-442.}
+ {Horn, J. L. (1965). A rationale and test for the number of factors in factor analysis. 
+ 	\emph{Psychometrika, 30,} 179-185.}
 \cr\cr {O'Connor, B. P. (2000). SPSS and SAS programs for determining 
   the number of components using parallel analysis and Velicer's 
   MAP test. \emph{Behavior Research Methods, Instrumentation, and
   Computers, 32,} 396-402.}
+\cr\cr {Zwick, W. R., & Velicer, W. F. (1986). Comparison of five rules for determining the number of 
+	components to retain. \emph{Psychological Bulletin, 99,} 432-442.}
 }
 \author{Brian P. O'Connor }
 \examples{
-\dontrun{
+\donttest{
 PARALLEL(Nvars=15, Ncases=250, Ndatasets=100, extract='PCA', percentile=95,
-         corkind='pearson', display=TRUE)
+         corkind='pearson', verbose=TRUE)
 }
 }

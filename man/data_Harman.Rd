@@ -6,12 +6,12 @@
 \usage{data(data_Harman)}
 \references{Harman, H. H. (1967). \emph{Modern factor analysis (2nd. ed.).} Chicago: University of Chicago Press.}
 \examples{
-\dontrun{
+\donttest{
 # MAP test on the Harman correlation matrix
-MAP(data_Harman, display=TRUE)
+MAP(data_Harman, verbose=TRUE)
 
 # parallel analysis of the Harman correlation matrix
 RAWPAR(data_Harman, extract='PCA', Ndatasets=100, percentile=95,
-       Ncases=305, display=TRUE)
+       Ncases=305, verbose=TRUE)
 }
 }

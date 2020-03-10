@@ -1,6 +1,6 @@
 \name{MAP}
 \alias{MAP}
-\title{Velicer's minimum average partial (MAP) test for number of factors}
+\title{Velicer's minimum average partial (MAP) test for the number of factors}
 \description{Velicer's minimum average partial (MAP) test for determining the number 
 	of factors focuses on the common variance in a correlation matrix. It involves 
 	a complete principal components analysis followed by the examination of a series 
@@ -30,18 +30,20 @@
 	employed as an alternative to factor analysis or as a first-stage solution for factor 
 	analysis, the stopping rule proposed here would seem the most appropriate." (1976, p. 326)'	
 	}
-\usage{MAP(data, corkind, display)}
+\usage{MAP(data, corkind, verbose)}
 \arguments{
  \item{data}{
  \code{}An all-numeric dataframe where the rows are cases & the columns are the variables, 
  or a correlation matrix with ones on the diagonal. The function internally determines 
  whether the data are a correlation matrix.}
+
  \item{corkind}{
  \code{}The kind of correlation matrix to be used if data is not a correlation matrix. 
  The options are 'pearson', 'kendall', 'spearman', and 'polychoric'. Required only if 
  the entered data is not a correlation matrix.}
- \item{display}{
- \code{}Display the results? The options are TRUE or FALSE.}
+                  
+  \item{verbose}{
+  \code{}Should detailed results be displayed in console? \cr The options are: TRUE (default) or FALSE.}
 }
 \value{ A list with the following elements:
  \item{eigenvalues}{eigenvalues}
@@ -65,16 +67,16 @@
 \author{Brian P. O'Connor }
 \examples{
 # MAP test on the Harman correlation matrix
-MAP(data_Harman, corkind='pearson', display=TRUE)
+MAP(data_Harman, corkind='pearson', verbose=TRUE)
 
-\dontrun{
+\donttest{
 # MAP test on the Rosenberg Self-Esteem Scale (RSE) using Pearson correlations
-MAP(data_RSE, corkind='pearson', display=TRUE)
+MAP(data_RSE, corkind='pearson', verbose=TRUE)
 
 # MAP test on the Rosenberg Self-Esteem Scale (RSE) using polychoric correlations
-MAP(data_RSE, corkind='polychoric', display=TRUE)
+MAP(data_RSE, corkind='polychoric', verbose=TRUE)
 
 # MAP test on the NEO-PI-R data
-MAP(data_NEOPIR, display=TRUE)
+MAP(data_NEOPIR, verbose=TRUE)
 }
 }

@@ -1,14 +1,14 @@
 \name{EXTENSION_FA}
 \alias{EXTENSION_FA}
-\title{extension factor analysis}
-\description{Extension factor analysis provides correlations between nonfactored items and 
+\title{Extension factor analysis}
+\description{Extension factor analysis, which provides correlations between nonfactored items and 
 	         the factors that exist in a set of core items. The extension item correlations
-	         are then used to decide which factor, if any, a prospective item belongs to. }
+	         are then used to decide which factor, if any, a prospective item belongs to.}
 \usage{
 EXTENSION_FA(data, Ncore, Next, higherorder, roottest,  
              corkind, corkindRAND, extract, rotate, Nfacts, 
              NfactsHO, Ndatasets, percentile, salvalue, numsals, 
-             iterpaf, iterml, tolerml, ppower)
+             iterpaf, iterml, tolerml, ppower, verbose)
 }
 \arguments{
   \item{data}{
@@ -37,7 +37,7 @@ EXTENSION_FA(data, Ncore, Next, higherorder, roottest,
   \code{}Should a higher-order factor analysis be conducted? The options are TRUE or FALSE.}
 
   \item{roottest}{
-  \code{}The method for determing the number of factors. The options are:
+  \code{}The method for determining the number of factors. The options are:
          'Nsalient' for number of salient loadings (see salvalue & numsals below);
          'parallel' for parallel analysis (see Ndatasets & percentile below);
          'MAP' for Velicer's minimum average partial test;
@@ -96,6 +96,9 @@ EXTENSION_FA(data, Ncore, Next, higherorder, roottest,
   \item{ppower}{ 
   \code{}The power value to be used in a promax rotation (required only if
          rotate = 'promax'). Suggested value: 3}
+                  
+  \item{verbose}{
+  \code{}Should detailed results be displayed in console? \cr The options are: TRUE (default) or FALSE.}
 }
 \details{
 Traditional scale development statistics can produce results that are baffling or misunderstood by
@@ -153,16 +156,16 @@ extension variable correlations -- all without computing factor scores.
 }
 \author{Brian P. O'Connor }
 \examples{
-\dontrun{
+\donttest{
 EXTENSION_FA(data_RSE, Ncore=7, Next=3, higherorder=TRUE, roottest='MAP',  
              corkind='pearson', extract='PCA', rotate='promax', Nfacts=4, 
              NfactsHO=1, Ndatasets=100, percentile=95, salvalue=.40, numsals=3, 
-             iterpaf=200, iterml=30, tolerml=.001, ppower=4)
+             iterpaf=200, iterml=30, tolerml=.001, ppower=4, verbose=TRUE)
 
 EXTENSION_FA(data_NEOPIR, Ncore=12, Next=6, higherorder=TRUE, roottest='MAP',  
              corkind='pearson', extract='PCA', rotate='promax', Nfacts=4, 
              NfactsHO=1, Ndatasets=100, percentile=95, salvalue=.40, numsals=3, 
-             iterpaf=200, iterml=30, tolerml=.001, ppower=4)
+             iterpaf=200, iterml=30, tolerml=.001, ppower=4, verbose=TRUE)
 
 }
 }

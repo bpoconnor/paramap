@@ -1,6 +1,6 @@
 \name{ROOTFIT}
 \alias{ROOTFIT}
-\title{factor fit coefficients}
+\title{Factor fit coefficients}
 \description{A variety of fit coefficients for the possible N-factor solutions 
 	in exploratory factor analysis}
 \usage{ROOTFIT(data, corkind, Ncases, extract, verbose)}
@@ -24,9 +24,9 @@
   	    'PAF' for principal axis / common factor analysis;
   	    'PCA' for principal components analysis.
   	    'ML' for maximum likelihood estimation.}
-  	    
+                  
   \item{verbose}{
-  \code{}Display descriptions of the fit coefficients? The options are 'TRUE' (default) or 'FALSE'.}
+  \code{}Should detailed results be displayed in console? \cr The options are: TRUE (default) or FALSE.}
 }
 \value{A list with eigenvalues & fit coefficients.}
 \author{Brian P. O'Connor }
@@ -35,7 +35,7 @@
 ROOTFIT(data_RSE, corkind='pearson', extract='ML')
 ROOTFIT(data_RSE, corkind='pearson', extract='PCA', verbose = 'FALSE')
 
-\dontrun{
+\donttest{
 # NEO-PI-R data
 ROOTFIT(data_NEOPIR, corkind='pearson', extract='ML')
 ROOTFIT(data_NEOPIR, corkind='pearson', extract='PCA', verbose = 'FALSE')

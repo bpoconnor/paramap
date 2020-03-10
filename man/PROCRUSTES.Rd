@@ -1,20 +1,23 @@
 \name{PROCRUSTES}
 \alias{PROCRUSTES}
-\title{factor solution congruence}
-\description{This function conducts Procrustes rotations of a factor loading matrix
+\title{Procrustes factor rotation}
+\description{Conducts Procrustes rotations of a factor loading matrix
 	 to a target factor matrix, and it computes the factor solution congruence and 
 	 the root mean square residual (based on comparisons of the entered factor loading
 	 matrix with the Procrustes-rotated matrix).}
-\usage{PROCRUSTES(loadings, target, type, display)}
+\usage{PROCRUSTES(loadings, target, type, verbose)}
 \arguments{
   \item{loadings}{
   \code{}The loading matrix that will be aligned with the target.}
+
   \item{target}{
   \code{}The target loading matrix.}
+
   \item{type}{
   \code{}The options are 'orthogonal' or 'oblique' rotation.}
-  \item{display}{
-  \code{}Display the results? The options are TRUE or FALSE.}
+                  
+  \item{verbose}{
+  \code{}Should detailed results be displayed in console? \cr The options are: TRUE (default) or FALSE.}
 }
 \details{This function conducts Procrustes rotations of a factor loading matrix to 
 	a target factor matrix, and it computes the factor solution congruence and the root 
@@ -47,8 +50,8 @@
 \author{Brian P. O'Connor}
 \examples{
 # RSE data
-loadings <- PCA(data_RSE[1:150,],   Nfactors = 2, rotate='varimax', display=FALSE)
-target   <- PCA(data_RSE[151:300,], Nfactors = 2, rotate='varimax', display=FALSE)
+loadings <- PCA(data_RSE[1:150,],   Nfactors = 2, rotate='varimax', verbose=FALSE)
+target   <- PCA(data_RSE[151:300,], Nfactors = 2, rotate='varimax', verbose=FALSE)
 
-PROCRUSTES(loadings$loadingsROT, target$loadingsROT, type = 'orthogonal', display=TRUE)
+PROCRUSTES(loadings$loadingsROT, target$loadingsROT, type = 'orthogonal', verbose=TRUE)
 }

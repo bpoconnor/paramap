@@ -7,12 +7,12 @@
 \examples{
 head(data_RSE)
 
-\dontrun{
+\donttest{
 # MAP test on the Rosenberg Self-Esteem Scale (RSE) data
-MAP(data_RSE, corkind='pearson', display=TRUE)
+MAP(data_RSE, corkind='pearson', verbose=TRUE)
 
 # parallel analysis of the Rosenberg Self-Esteem Scale (RSE) data
 RAWPAR(data_RSE, extract='PCA', Ndatasets=100, percentile=95,
-       corkind='pearson', display=TRUE)
+       corkind='pearson', verbose=TRUE)
 }
 }

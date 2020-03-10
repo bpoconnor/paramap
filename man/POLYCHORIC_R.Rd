@@ -1,16 +1,20 @@
 \name{POLYCHORIC_R}
 \alias{POLYCHORIC_R}
-\title{polychoric correlation matrix}
-\description{This function produces a polychoric correlation matrix}
-\usage{POLYCHORIC_R(data, method)}
+\title{Polychoric correlation matrix}
+\description{Produces a polychoric correlation matrix}
+\usage{POLYCHORIC_R(data, method, verbose)}
 \arguments{
   \item{data}{
   \code{}An all-numeric dataframe where the rows are cases & the columns are the 
   variables. All values should be integers, as in the values for Likert rating scales.}
+
   \item{method}{
   \code{}(optional) The source package used to estimate the polychoric correlations:  
   	    'Revelle' for the psych package (the default);  	    
   	    'Fox' for the polycor package.}
+                  
+  \item{verbose}{
+  \code{}Should detailed results be displayed in console? \cr The options are: TRUE (default) or FALSE.}
 }
 \details{Applying familiar factor analysis procedures to item-level data can produce 
 	misleading or uninterpretable results. Common factor analysis, maximum likelihood 
@@ -46,7 +50,7 @@
 	when the number of item response categories is > 8.
 	
 	The hetcor function from the polycor package requires a dataframe as input. 
-	It also "computes a heterogenous correlation matrix, consisting of Pearson 
+	It also "computes a heterogeneous correlation matrix, consisting of Pearson 
 	product-moment correlations between numeric variables, polyserial correlations 
 	between numeric and ordinal variables, and polychoric correlations between 
 	ordinal variables." This means that polychoric correlations will not be 
@@ -56,9 +60,14 @@
 \value{The polychoric correlation matrix}
 \author{Brian P. O'Connor }
 \examples{
-\dontrun{
-# polychoric correlation matrix for the Rosenberg Self-Esteem Scale (RSE)
-Rpoly <- POLYCHORIC_R(data_RSE, method = 'Fox')
-Rpoly
+\donttest{
+# Revelle polychoric correlation matrix for the Rosenberg Self-Esteem Scale (RSE)
+POLYCHORIC_R(data_RSE, method = 'Revelle')
+
+# Fox polychoric correlation matrix for the Rosenberg Self-Esteem Scale (RSE)
+# first convert items to ordered factors                  
+data_RSE_ord <- as.data.frame(data_RSE)	
+for (j in 1:ncol(data_RSE_ord)) {data_RSE_ord[, j] <- ordered(data_RSE_ord[, j])}
+POLYCHORIC_R(data_RSE_ord, method = 'Fox')
 }
 }

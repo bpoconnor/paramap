@@ -12,12 +12,12 @@
 \examples{
 head(data_NEOPIR) 
 
-\dontrun{
+\donttest{
 # MAP test on the data_NEOPIR data
-MAP(data_NEOPIR, corkind='pearson', display=TRUE)
+MAP(data_NEOPIR, corkind='pearson', verbose=TRUE)
 
 # parallel analysis of the data_NEOPIR data
 RAWPAR(data_NEOPIR, extract='PCA', Ndatasets=100, percentile=95,
-       corkind='pearson', display=TRUE)
+       corkind='pearson', verbose=TRUE)
 }
 }

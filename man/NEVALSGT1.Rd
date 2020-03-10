@@ -1,7 +1,7 @@
 \name{NEVALSGT1}
 \alias{NEVALSGT1}
-\title{The number of eigenvalues greater than 1 in a correlation matrix.}
-\description{This function returns the count of the number of eigenvalues greater than 1 in
+\title{Number of eigenvalues greater than 1 in a correlation matrix.}
+\description{Returns the count of the number of eigenvalues greater than 1 in
 	         a correlation matrix. This value is often referred to as the "Kaiser", 
 	         "Kaiser-Guttman", or "Guttman-Kaiser" rule for determining
 	         the number of components or factors in a correlation matrix.
@@ -24,18 +24,20 @@
 	         
 	         This function is included in this package for curiosity and research purposes.
 	         }
-\usage{NEVALSGT1(data, corkind, display)}
+\usage{NEVALSGT1(data, corkind, verbose)}
 \arguments{
  \item{data}{
  \code{}An all-numeric dataframe where the rows are cases & the columns are the variables,
         or a correlation matrix with ones on the diagonal. The function internally determines 
         whether the data are a correlation matrix.}
+
  \item{corkind}{
  \code{}The kind of correlation matrix to be used if data is not a correlation matrix. 
         The options are 'pearson', 'kendall', 'spearman', and 'polychoric'. Required only if
         the entered data is not a correlation matrix.}
- \item{display}{
- \code{}Display the eigenvalues and the number that are greater than one? The options are TRUE or FALSE.}
+                  
+  \item{verbose}{
+  \code{}Should detailed results be displayed in console? \cr The options are: TRUE (default) or FALSE.}
 }
 \value{The number of eigenvalues greater than 1.}
 \references{
@@ -51,14 +53,14 @@
 }
 \author{Brian P. O'Connor}
 \examples{
-\dontrun{
+\donttest{
 # test on the Harman correlation matrix
-NEVALSGT1(data_Harman, corkind='pearson', display=TRUE)
+NEVALSGT1(data_Harman, corkind='pearson', verbose=TRUE)
 
 # test on the Rosenberg Self-Esteem Scale (RSE) using Pearson correlations
-NEVALSGT1(data_RSE, corkind='pearson', display=TRUE)
+NEVALSGT1(data_RSE, corkind='pearson', verbose=TRUE)
 
 # test on the Rosenberg Self-Esteem Scale (RSE) using polychoric correlations
-NEVALSGT1(data_RSE, corkind='polychoric', display=TRUE)
+NEVALSGT1(data_RSE, corkind='polychoric', verbose=TRUE)
 }
 }

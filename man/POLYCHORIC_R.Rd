@@ -48,15 +48,7 @@
 	psych package to produce a full matrix of polychoric correlations. The function 
 	uses John Fox's hetcor function from the polycor package when requested or 
 	when the number of item response categories is > 8.
-	
-	The hetcor function from the polycor package requires a dataframe as input. 
-	It also "computes a heterogeneous correlation matrix, consisting of Pearson 
-	product-moment correlations between numeric variables, polyserial correlations 
-	between numeric and ordinal variables, and polychoric correlations between 
-	ordinal variables." This means that polychoric correlations will not be 
-	computed if a variable is numeric. A numeric variable must first be converted 
-	to an ordinal variable (ordered factor), by the user, for the function to 
-	produce polychoric correlations for that variable.'}
+}
 \value{The polychoric correlation matrix}
 \author{Brian P. O'Connor }
 \examples{
@@ -65,9 +57,6 @@
 POLYCHORIC_R(data_RSE, method = 'Revelle')
 
 # Fox polychoric correlation matrix for the Rosenberg Self-Esteem Scale (RSE)
-# first convert items to ordered factors                  
-data_RSE_ord <- as.data.frame(data_RSE)	
-for (j in 1:ncol(data_RSE_ord)) {data_RSE_ord[, j] <- ordered(data_RSE_ord[, j])}
-POLYCHORIC_R(data_RSE_ord, method = 'Fox')
+POLYCHORIC_R(data_RSE, method = 'Fox')
 }
 }

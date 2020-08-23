@@ -4,7 +4,7 @@
 
 ---
 
-paramap was an R package previously on GitHub with factor analysis-related functions and datasets for assessing dimensionality.
+paramap was an R package, previously on GitHub, with factor analysis-related functions and datasets for assessing dimensionality.
 
 The package is now on the R CRAN site under a new name, "EFA.dimensions":
 

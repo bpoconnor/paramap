@@ -4,20 +4,11 @@
 
 ---
 
-paramap is an R package with factor analysis-related functions and datasets for assessing dimensionality.
+paramap was an R package previously on GitHub with factor analysis-related functions and datasets for assessing dimensionality.
 
----
+The package is now on the R CRAN site under a new name, "EFA.dimensions":
 
-### License
+https://cran.r-project.org/web/packages/EFA.dimensions/index.html
 
-This package is free software; you can redistribute it
-under the terms of the GNU General Public License, version 3, as
-published by the Free Software Foundation.
+Thanks for your interest.
 
-This program is distributed in the hope that it will be useful, but
-without any warranty; without even the implied warranty of
-merchantability or fitness for a particular purpose.  See the GNU
-General Public License for more details.
-
-A copy of the GNU General Public License, version 3, is available at
-<https://www.r-project.org/Licenses/GPL-3>
